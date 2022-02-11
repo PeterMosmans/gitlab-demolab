@@ -1,0 +1,2 @@
+# Let's make sure the sensitive variables aren't shared
+.env

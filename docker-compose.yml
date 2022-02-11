@@ -1,0 +1,85 @@
+---
+version: "3.5"
+
+networks:
+  default:
+    name: gitlab-demolab-network
+
+volumes:
+  gitlab_config:
+    name: ${DEMO_NAME}-gitlab_config
+  gitlab_data:
+    name: ${DEMO_NAME}-gitlab_data
+  gitlab_logs:
+    name: ${DEMO_NAME}-gitlab_logs
+  gitlab_runner_config:
+    name: ${DEMO_NAME}-gitlab_runner_config
+
+services:
+  # The GitLab instance
+  gitlab:
+    container_name: ${DEMO_NAME}-gitlab
+    environment:
+        # These settings will be evaluated on load - see
+        # https://docs.gitlab.com/omnibus/docker/#pre-configure-docker-container
+      GITLAB_OMNIBUS_CONFIG: |
+          external_url '${EXTERNAL_URL}'
+          gitlab_rails['initial_root_password'] = "${INITIAL_ROOT_PASSWORD}"
+          gitlab_rails['rack_attack_git_basic_auth'] = {
+          'enabled' => true,
+          'ip_whitelist' => ['127.0.0.1'],
+          'maxretry' => 10,
+          'findtime' => 60,
+          'bantime' => 3600
+          }
+          gitlab_rails['time_zone'] = 'Europe/Amsterdam'
+          gitlab_rails['usage_ping_enabled'] = false
+          letsencrypt['enable'] = false
+          nginx['listen_https'] = false
+          puma['port'] = 3456
+          prometheus_monitoring['enable'] = false
+          gitlab_rails['initial_shared_runners_registration_token'] = "${REGISTRATION_TOKEN}"
+      GITLAB_POST_RECONFIGURE_SCRIPT: /etc/gitlab/post-reconfigure.sh
+    hostname: gitlab
+    image: gitlab/gitlab-ce:14.7.2-ce.0
+    ports:
+      # GitLab reads the nginx port number from EXTERNAL_URL
+      - "${HTTP_PORT}:${HTTP_PORT}"
+      - "${SSH_PORT}:22"
+    restart: unless-stopped
+    shm_size: "256m"
+    stop_grace_period: 10m
+    volumes:
+      - gitlab_config:/etc/gitlab
+      - gitlab_data:/var/opt/gitlab
+      - gitlab_logs:/var/log/gitlab
+      - ./gitlab-post-reconfigure.sh:/etc/gitlab/post-reconfigure.sh:ro
+
+  # The runner
+  gitlab-runner:
+    container_name: ${DEMO_NAME}-gitlab-runner
+    depends_on:
+      - gitlab
+    hostname: gitlab-runner
+    image: gitlab/gitlab-runner:v14.7.0
+    restart: unless-stopped
+    volumes:
+      - gitlab_runner_config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  # An ephemeral container which registers the runner
+  gitlab-runner-registrar:
+    container_name: ${DEMO_NAME}-gitlab-runner-registrar
+    depends_on:
+      - gitlab-runner
+    entrypoint: /root/entrypoint.sh
+    # Ensure that the script has access to the variable as defined in .env
+    environment:
+      - EXTERNAL_URL
+      - REGISTRATION_TOKEN
+    hostname: gitlab-runner
+    image: gitlab/gitlab-runner:v14.7.0
+    volumes:
+      - gitlab_runner_config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./gitlab-runner-registrar.sh:/root/entrypoint.sh
