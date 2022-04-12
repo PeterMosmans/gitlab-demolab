@@ -41,7 +41,7 @@ services:
           gitlab_rails['initial_shared_runners_registration_token'] = "${REGISTRATION_TOKEN}"
       GITLAB_POST_RECONFIGURE_SCRIPT: /etc/gitlab/post-reconfigure.sh
     hostname: gitlab
-    image: gitlab/gitlab-ce:14.7.2-ce.0
+    image: gitlab/gitlab-ce:${GITLAB_CE_VERSION}
     ports:
       # GitLab reads the nginx port number from EXTERNAL_URL
       - "${HTTP_PORT}:${HTTP_PORT}"
@@ -61,7 +61,7 @@ services:
     depends_on:
       - gitlab
     hostname: gitlab-runner
-    image: gitlab/gitlab-runner:v14.7.0
+    image: gitlab/gitlab-runner:${GITLAB_VERSION}
     restart: unless-stopped
     volumes:
       - gitlab_runner_config:/etc/gitlab-runner
@@ -78,7 +78,7 @@ services:
       - EXTERNAL_URL
       - REGISTRATION_TOKEN
     hostname: gitlab-runner
-    image: gitlab/gitlab-runner:v14.7.0
+    image: gitlab/gitlab-runner:${GITLAB_VERSION}
     volumes:
       - gitlab_runner_config:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
