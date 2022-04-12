@@ -5,38 +5,30 @@ GitLab Demolab
 This repository contains all files to set up a local network, consisting of a
 CI/CD GitLab server, and a (docker-in-docker compatible) GitLab runner.
 
+Prerequisites
+=============
+
+Have ``docker`` and ``docker-compose`` installed.
+
+Usage
+=====
+
 All variables are stored in an ``.env`` file:
 
 ::
 
    DEMO_NAME=my-demo
    EXTERNAL_URL=http://gitlab:8080/
+   GITLAB_VERSION=v14.9.1
+   GITLAB_CE_VERSION=14.9.1-ce.0
    HTTP_PORT=8080
    INITIAL_ROOT_PASSWORD=the-initial-password-for-user-root
    REGISTRATION_TOKEN=a-random-token-to-register-gitlab-runners
    SSH_PORT=7722
 
-The ``.env`` file is not supplied in this repository. To quickly get started,
-copy the file ``env-example`` file to ``.env``, edit the values, and you're good
-to go.
-
-The ``DEMO_NAME`` allows you to run multiple instances of this demo on the same
-machine, as it will generate its own "Docker namespace".
-
-The ``HTTP_PORT`` specifies on which port the GitLab webinterface can be
-accessed.
-
-The ``SSH`` port is the SSH port for GitLab.
-
-If you want to access the webinterface, make sure that the ``EXTERNAL_URL`` can
-be resolved by your browser. If you choose any other value than ``localhost``,
-make sure that the hostname can be resolved (e.g. by adding it to the ``hosts``
-file).
-
-Prerequisites
-=============
-
-Have ``docker`` and ``docker-compose`` installed.
+The ``.env`` file itself not supplied in this repository, but an example is: To
+quickly get started, copy the file ``env-example`` file to ``.env``, edit the
+values, and you're good to go.
 
 .. code-block:: console
 
@@ -70,3 +62,22 @@ To clean everything up, remove the containers by hand.
 
 Please note that this is a lab setup - and not meant to be used in production in
 any way.
+
+Variables
+=========
+
+The ``DEMO_NAME`` allows you to run multiple instances of this demo on the same
+machine, as it will generate its own "Docker namespace".
+
+``GITTLAB_VERSION`` and ``GITLAB_CE_VERSION`` allow you to specify which images
+you would like to use.
+
+The ``HTTP_PORT`` specifies on which port the GitLab webinterface can be
+accessed.
+
+The ``SSH`` port is the SSH port for GitLab.
+
+If you want to access the webinterface, make sure that the ``EXTERNAL_URL`` can
+be resolved by your browser. If you choose any other value than ``localhost``,
+make sure that the hostname can be resolved (e.g. by adding it to the ``hosts``
+file).
