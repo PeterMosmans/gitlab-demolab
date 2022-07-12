@@ -19,8 +19,8 @@ All variables are stored in an ``.env`` file:
 
    DEMO_NAME=my-demo
    EXTERNAL_URL=http://gitlab:8080/
-   GITLAB_VERSION=v14.9.1
-   GITLAB_CE_VERSION=14.9.1-ce.0
+   GITLAB_VERSION=v15.1.2
+   GITLAB_CE_VERSION=15.1.2-ce.0
    HTTP_PORT=8080
    INITIAL_ROOT_PASSWORD=the-initial-password-for-user-root
    REGISTRATION_TOKEN=a-random-token-to-register-gitlab-runners
