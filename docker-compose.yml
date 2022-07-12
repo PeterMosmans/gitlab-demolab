@@ -61,7 +61,7 @@ services:
     depends_on:
       - gitlab
     hostname: gitlab-runner
-    image: gitlab/gitlab-runner:${GITLAB_VERSION}
+    image: gitlab/gitlab-runner:latest
     restart: unless-stopped
     volumes:
       - gitlab_runner_config:/etc/gitlab-runner
@@ -78,7 +78,7 @@ services:
       - EXTERNAL_URL
       - REGISTRATION_TOKEN
     hostname: gitlab-runner
-    image: gitlab/gitlab-runner:${GITLAB_VERSION}
+    image: gitlab/gitlab-runner:latest
     volumes:
       - gitlab_runner_config:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
