@@ -14,6 +14,23 @@ volumes:
     name: ${DEMO_NAME}-gitlab_logs
   gitlab_runner_config:
     name: ${DEMO_NAME}-gitlab_runner_config
+  gitlab_runner_2_config:
+    name: ${DEMO_NAME}-gitlab_runner_2_config
+  gitlab_runner_3_config:
+    name: ${DEMO_NAME}-gitlab_runner_3_config
+  sonarqube_config:
+    name: ${DEMO_NAME}-sonarqube_config
+  sonarqube_data:
+    name: ${DEMO_NAME}-sonarqube_data
+  sonarqube_extensions:
+    name: ${DEMO_NAME}-sonarqube_extensions
+  sonarqube_logs:
+    name: ${DEMO_NAME}-sonarqube_logs
+  sonarqube_temp:
+    name: ${DEMO_NAME}-sonarqube_temp
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
 
 services:
   # The GitLab instance
@@ -36,6 +53,7 @@ services:
           gitlab_rails['usage_ping_enabled'] = false
           letsencrypt['enable'] = false
           nginx['listen_https'] = false
+          nginx['client_max_body_size'] = '0'
           puma['port'] = 3456
           prometheus_monitoring['enable'] = false
           gitlab_rails['initial_shared_runners_registration_token'] = "${REGISTRATION_TOKEN}"
