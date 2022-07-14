@@ -4,10 +4,10 @@
 set -u
 
 # Check if registration file already exists
-while ! grep -q 'default runner' /etc/gitlab-runner/config.toml; do
-    echo "trying to register default runner"
+while ! grep -q "runner on $HOSTNAME" /etc/gitlab-runner/config.toml; do
+    echo "trying to register runner on $HOSTNAME"
     /usr/bin/gitlab-runner register \
-                           --description "default runner" \
+                           --description "runner on $HOSTNAME" \
                            --docker-image "docker:20.10.12" \
                            --docker-network-mode "gitlab-demolab-network" \
                            --docker-privileged \
