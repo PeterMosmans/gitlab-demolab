@@ -3,7 +3,8 @@ GitLab Demolab
 ##############
 
 This repository contains all files to set up a local network, consisting of a
-CI/CD GitLab server, and a (docker-in-docker compatible) GitLab runner.
+CI/CD GitLab server, multiple (docker-in-docker compatible) GitLab runners, as
+well as SonarQube.
 
 Prerequisites
 =============
@@ -19,7 +20,6 @@ All variables are stored in an ``.env`` file:
 
    DEMO_NAME=my-demo
    EXTERNAL_URL=http://gitlab:8080/
-   GITLAB_VERSION=v15.1.2
    GITLAB_CE_VERSION=15.1.2-ce.0
    HTTP_PORT=8080
    INITIAL_ROOT_PASSWORD=the-initial-password-for-user-root
@@ -38,9 +38,9 @@ values, and you're good to go.
 
    docker-compose up --detach
 
-This will fire up an instance of GitLab, and a GitLab runner, capable of
-performing Docker-in-Docker commands. The registration of the GitLab runner will
-be performed automatically.
+This will fire up an instance of GitLab, three GitLab runners, capable of
+performing Docker-in-Docker commands, and SonarQube. The registration of the
+GitLab runners will be performed automatically.
 
 Stopping / pausing the demolab
 ==============================
@@ -50,15 +50,12 @@ Stopping / pausing the demolab
    docker-compose stop
 
 By default all data, configuration and logs will be stored in persistent Docker
-volumes. They will remain, even if you stop or remove the Docker containers.
-To clean everything up, remove the containers by hand.
+volumes. They will remain, even if you stop or remove the Docker containers. To
+clean everything up, remove the containers including named volumes.
 
 .. code-block:: console
 
-   docker-compose rm
-   source .env
-   docker volume rm ${DEMO_NAME}-gitlab_{config,data,logs,runner_config}
-
+   docker-compose down --remove-orphans --volumes
 
 Please note that this is a lab setup - and not meant to be used in production in
 any way.
@@ -69,8 +66,8 @@ Variables
 The ``DEMO_NAME`` allows you to run multiple instances of this demo on the same
 machine, as it will generate its own "Docker namespace".
 
-``GITTLAB_VERSION`` and ``GITLAB_CE_VERSION`` allow you to specify which images
-you would like to use.
+``GITLAB_CE_VERSION`` allows you to specify which GitLab image you would like to
+use. Please note that the runners always use the latest version.
 
 The ``HTTP_PORT`` specifies on which port the GitLab webinterface can be
 accessed.
