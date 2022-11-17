@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/compare/1.2.0...1.3.0) (2022-11-17)
+
+### Features
+
+- parameterize SonarQube image
+  ([46ec3dd](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/commit/46ec3dd415f9840a965174598b644994db25ec7d))
+
 ## [1.2.0](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/compare/1.1.0...1.2.0) (2022-07-14)
 
 ### Features
