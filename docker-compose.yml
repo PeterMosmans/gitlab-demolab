@@ -162,7 +162,7 @@ services:
   # Sonarqube
   sonarqube:
     container_name: ${DEMO_NAME}-sonarqube
-    image: sonarqube:9-community
+    image: sonarqube:${SONARQUBE_VERSION}
     networks:
       default:
         aliases:

@@ -20,7 +20,8 @@ All variables are stored in an ``.env`` file:
 
    DEMO_NAME=my-demo
    EXTERNAL_URL=http://gitlab:8080/
-   GITLAB_CE_VERSION=15.1.2-ce.0
+   GITLAB_CE_VERSION=15.5.4-ce.0
+   SONARQUBE_VERSION=9.7.1-community
    HTTP_PORT=8080
    INITIAL_ROOT_PASSWORD=the-initial-password-for-user-root
    REGISTRATION_TOKEN=a-random-token-to-register-gitlab-runners
@@ -68,6 +69,9 @@ machine, as it will generate its own "Docker namespace".
 
 ``GITLAB_CE_VERSION`` allows you to specify which GitLab image you would like to
 use. Please note that the runners always use the latest version.
+
+``SONARQUBE_VERSION`` allows you to specify which SonarQube image you would like
+to use.
 
 The ``HTTP_PORT`` specifies on which port the GitLab webinterface can be
 accessed.
