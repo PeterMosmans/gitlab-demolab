@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/PeterMosmans/gitlab-demolab/compare/1.3.0...1.4.0) (2023-05-31)
+
+
+### Features
+
+* add installer script to start up demo lab ([3e3a636](https://github.com/PeterMosmans/gitlab-demolab/commit/3e3a636243d90bb29a276735fa169521906e94a4))
+* update default variables with new versions ([6980dd0](https://github.com/PeterMosmans/gitlab-demolab/commit/6980dd054469578b87dabcca07b4a0aa7d104feb))
+
 ## 1.4.0 (2023-05-31)
 
 
