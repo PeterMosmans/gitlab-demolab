@@ -20,8 +20,9 @@ All variables are stored in an ``.env`` file:
 
    DEMO_NAME=my-demo
    EXTERNAL_URL=http://gitlab:8080/
-   GITLAB_CE_VERSION=15.5.4-ce.0
-   SONARQUBE_VERSION=9.7.1-community
+   GITLAB_CE_VERSION=16.0.1-ce.0
+   SONARQUBE_VERSION=10.0-community
+   SONARQUBE_PASSWORD=sonarqubeadminpassword
    HTTP_PORT=8080
    INITIAL_ROOT_PASSWORD=the-initial-password-for-user-root
    REGISTRATION_TOKEN=a-random-token-to-register-gitlab-runners
@@ -29,7 +30,7 @@ All variables are stored in an ``.env`` file:
 
 The ``.env`` file itself not supplied in this repository, but an example is: To
 quickly get started, copy the file ``env-example`` file to ``.env``, edit the
-values, and you're good to go.
+values (especially the SonarQube and GitLab passwords), and you're good to go.
 
 .. code-block:: console
 
@@ -37,7 +38,7 @@ values, and you're good to go.
 
    # Edit the values in .env
 
-   docker-compose up --detach
+   ./installer.sh
 
 This will fire up an instance of GitLab, three GitLab runners, capable of
 performing Docker-in-Docker commands, and SonarQube. The registration of the
@@ -72,6 +73,8 @@ use. Please note that the runners always use the latest version.
 
 ``SONARQUBE_VERSION`` allows you to specify which SonarQube image you would like
 to use.
+
+``SONARQUBE_PASSWORD`` is the initial password for the admin user of SonarQube.
 
 The ``HTTP_PORT`` specifies on which port the GitLab webinterface can be
 accessed.
