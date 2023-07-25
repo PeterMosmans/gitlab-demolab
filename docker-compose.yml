@@ -37,26 +37,26 @@ services:
   gitlab:
     container_name: ${DEMO_NAME}-gitlab
     environment:
-        # These settings will be evaluated on load - see
-        # https://docs.gitlab.com/omnibus/docker/#pre-configure-docker-container
+      # These settings will be evaluated on load - see
+      # https://docs.gitlab.com/omnibus/docker/#pre-configure-docker-container
       GITLAB_OMNIBUS_CONFIG: |
-          external_url '${EXTERNAL_URL}'
-          gitlab_rails['initial_root_password'] = "${GITLAB_PASSWORD}"
-          gitlab_rails['rack_attack_git_basic_auth'] = {
-          'enabled' => true,
-          'ip_whitelist' => ['127.0.0.1'],
-          'maxretry' => 10,
-          'findtime' => 60,
-          'bantime' => 3600
-          }
-          gitlab_rails['time_zone'] = 'Europe/Amsterdam'
-          gitlab_rails['usage_ping_enabled'] = false
-          letsencrypt['enable'] = false
-          nginx['listen_https'] = false
-          nginx['client_max_body_size'] = '0'
-          puma['port'] = 3456
-          prometheus_monitoring['enable'] = false
-          gitlab_rails['initial_shared_runners_registration_token'] = "${REGISTRATION_TOKEN}"
+        external_url '${EXTERNAL_URL}'
+        gitlab_rails['initial_root_password'] = "${GITLAB_PASSWORD}"
+        gitlab_rails['rack_attack_git_basic_auth'] = {
+        'enabled' => true,
+        'ip_whitelist' => ['127.0.0.1'],
+        'maxretry' => 10,
+        'findtime' => 60,
+        'bantime' => 3600
+        }
+        gitlab_rails['time_zone'] = 'Europe/Amsterdam'
+        gitlab_rails['usage_ping_enabled'] = false
+        letsencrypt['enable'] = false
+        nginx['listen_https'] = false
+        nginx['client_max_body_size'] = '0'
+        puma['port'] = 3456
+        prometheus_monitoring['enable'] = false
+        gitlab_rails['initial_shared_runners_registration_token'] = "${REGISTRATION_TOKEN}"
       GITLAB_POST_RECONFIGURE_SCRIPT: /etc/gitlab/post-reconfigure.sh
     hostname: gitlab
     image: gitlab/gitlab-ce:${GITLAB_CE_VERSION}
