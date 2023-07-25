@@ -20,11 +20,13 @@ All variables are stored in an ``.env`` file:
 
    DEMO_NAME=my-demo
    EXTERNAL_URL=http://gitlab:8080/
+   GITLAB_CE_VERSION=16.2.1-ce.0
    GITLAB_CE_VERSION=16.0.1-ce.0
-   SONARQUBE_VERSION=10.0-community
+   SONARQUBE_VERSION=10.1-community
    SONARQUBE_PASSWORD=sonarqubeadminpassword
+   SONARQUBE_PORT=9000
    HTTP_PORT=8080
-   INITIAL_ROOT_PASSWORD=the-initial-password-for-user-root
+   GITLAB_PASSWORD=the-initial-password-for-user-root
    REGISTRATION_TOKEN=a-random-token-to-register-gitlab-runners
    SSH_PORT=7722
 
@@ -76,8 +78,9 @@ to use.
 
 ``SONARQUBE_PASSWORD`` is the initial password for the admin user of SonarQube.
 
-The ``HTTP_PORT`` specifies on which port the GitLab webinterface can be
-accessed.
+``SONARQUBE_PORT`` specifies on which port SonarQube can be accessed.
+
+``HTTP_PORT`` specifies on which port the GitLab webinterface can be accessed.
 
 The ``SSH`` port is the SSH port for GitLab.
 
