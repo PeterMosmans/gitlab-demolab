@@ -1,5 +1,7 @@
 # Changelog
 
+## [1.4.1](https://github.com/PeterMosmans/gitlab-demolab/compare/1.4.0...1.4.1) (2023-07-25)
+
 ## [1.4.0](https://github.com/PeterMosmans/gitlab-demolab/compare/1.3.0...1.4.0) (2023-05-31)
 
 ### Features
