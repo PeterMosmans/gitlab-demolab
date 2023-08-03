@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.5.0](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/compare/1.4.1...1.5.0) (2023-08-03)
+
+
+### Features
+
+* bind separate volume by default ([3dbe42e](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/commit/3dbe42ecf69f42b0d377ded8e66676ba4372ffc9))
+* display password when installlation finishes ([c5d98e4](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/commit/c5d98e4e49a073ca26970b1fe342c0a63c8e131f))
+* make network name variable ([5e364a4](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/commit/5e364a4375e1ed519ac8ffb1dc5de10cb08237cc))
+* only bind to localhost by default ([a29e95f](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/commit/a29e95fe69cb7c122ed398b2830bc9783d202e29))
+
 ## [1.4.1](https://github.com/PeterMosmans/gitlab-demolab/compare/1.4.0...1.4.1) (2023-07-25)
 
 ## [1.4.0](https://github.com/PeterMosmans/gitlab-demolab/compare/1.3.0...1.4.0) (2023-05-31)
