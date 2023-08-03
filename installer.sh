@@ -27,5 +27,5 @@ echo "Waiting for GitLab to start up..."
 while [[ $(sudo "$COMPOSE" -f "$compose_file" logs gitlab 2>/dev/null | grep -q "Server initialized"; echo $?) -ne 0 ]]; do
     sleep 1
 done
-echo "You can now log in to GitLab at ${EXTERNAL_URL}"
+echo "You can now log in to GitLab at ${EXTERNAL_URL} as root using password ${GITLAB_PASSWORD}"
 
