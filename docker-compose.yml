@@ -64,8 +64,8 @@ services:
     image: gitlab/gitlab-ce:${GITLAB_CE_VERSION}
     ports:
       # GitLab reads the nginx port number from EXTERNAL_URL
-      - "${HTTP_PORT}:${HTTP_PORT}"
-      - "${SSH_PORT}:22"
+      - "127.0.0.1:${HTTP_PORT}:${HTTP_PORT}"
+      - "127.0.0.1:${SSH_PORT}:22"
     restart: unless-stopped
     shm_size: "256m"
     stop_grace_period: 10m
@@ -170,7 +170,7 @@ services:
         aliases:
           - sonarqube.demo.local
     ports:
-      - "${SONARQUBE_PORT}:9000"
+      - "127.0.0.1:${SONARQUBE_PORT}:9000"
     restart: unless-stopped
     stop_grace_period: 10m
     volumes:

@@ -63,7 +63,8 @@ clean everything up, remove the containers including named volumes.
    docker-compose down --remove-orphans --volumes
 
 Please note that this is a lab setup - and not meant to be used in production in
-any way.
+any way. All services only bind / listen to ``127.0.0.1`` by default (this can
+be changed in the file ``docker-compose``
 
 Variables
 =========
