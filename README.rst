@@ -20,19 +20,20 @@ All variables are stored in an ``.env`` file:
 
    DEMO_NAME=my-demo
    EXTERNAL_URL=http://gitlab:8080/
-   GITLAB_CE_VERSION=16.2.1-ce.0
-   GITLAB_CE_VERSION=16.0.1-ce.0
+   GITLAB_CE_VERSION=16.2.2-ce.0
    SONARQUBE_VERSION=10.1-community
    SONARQUBE_PASSWORD=sonarqubeadminpassword
    SONARQUBE_PORT=9000
    HTTP_PORT=8080
-   GITLAB_PASSWORD=the-initial-password-for-user-root
+   GITLAB_PASSWORD=minimum-12-COMPLEX
    REGISTRATION_TOKEN=a-random-token-to-register-gitlab-runners
    SSH_PORT=7722
 
 The ``.env`` file itself not supplied in this repository, but an example is: To
 quickly get started, copy the file ``env-example`` file to ``.env``, edit the
 values (especially the SonarQube and GitLab passwords), and you're good to go.
+Note that the GITLAB_PASSWORD needs to be complex, otherwise installation will
+fail, see https://about.gitlab.com/handbook/security/password-standard.html
 
 .. code-block:: console
 

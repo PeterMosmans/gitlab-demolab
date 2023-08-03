@@ -3,9 +3,11 @@ version: "3.5"
 
 networks:
   default:
-    name: gitlab-demolab-network
+    name: ${DEMO_NAME}-network
 
 volumes:
+  dependency-check:
+    name: ${DEMO_NAME}-dependency-check
   gitlab_config:
     name: ${DEMO_NAME}-gitlab_config
   gitlab_data:
@@ -41,7 +43,7 @@ services:
       # https://docs.gitlab.com/omnibus/docker/#pre-configure-docker-container
       GITLAB_OMNIBUS_CONFIG: |
         external_url '${EXTERNAL_URL}'
-        gitlab_rails['initial_root_password'] = "${GITLAB_PASSWORD}"
+        gitlab_rails['initial_root_password'] = '${GITLAB_PASSWORD}'
         gitlab_rails['rack_attack_git_basic_auth'] = {
         'enabled' => true,
         'ip_whitelist' => ['127.0.0.1'],
