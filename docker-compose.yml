@@ -120,6 +120,8 @@ services:
     entrypoint: /root/entrypoint.sh
     # Ensure that the script has access to the variable as defined in .env
     environment:
+      - DEMO_NAME
+      - DIND_VERSION
       - EXTERNAL_URL
       - REGISTRATION_TOKEN
     # Hostname needs to be similar to the runner it's registering
@@ -137,6 +139,8 @@ services:
     entrypoint: /root/entrypoint.sh
     # Ensure that the script has access to the variable as defined in .env
     environment:
+      - DEMO_NAME
+      - DIND_VERSION
       - EXTERNAL_URL
       - REGISTRATION_TOKEN
     # Hostname needs to be similar to the runner it's registering
@@ -154,6 +158,8 @@ services:
     entrypoint: /root/entrypoint.sh
     # Ensure that the script has access to the variable as defined in .env
     environment:
+      - DEMO_NAME
+      - DIND_VERSION
       - EXTERNAL_URL
       - REGISTRATION_TOKEN
     # Hostname needs to be similar to the runner it's registering
