@@ -20,7 +20,7 @@ All variables are stored in an ``.env`` file:
 
    DEMO_NAME=my-demo
    EXTERNAL_URL=http://gitlab:8080/
-   GITLAB_CE_VERSION=16.2.2-ce.0
+   GITLAB_CE_VERSION=16.3.0-ce.0
    SONARQUBE_VERSION=10.1-community
    SONARQUBE_PASSWORD=sonarqubeadminpassword
    SONARQUBE_PORT=9000
