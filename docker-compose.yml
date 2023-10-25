@@ -14,12 +14,12 @@ volumes:
     name: ${DEMO_NAME}-gitlab_data
   gitlab_logs:
     name: ${DEMO_NAME}-gitlab_logs
-  gitlab_runner_config:
-    name: ${DEMO_NAME}-gitlab_runner_config
-  gitlab_runner_2_config:
-    name: ${DEMO_NAME}-gitlab_runner_2_config
-  gitlab_runner_3_config:
-    name: ${DEMO_NAME}-gitlab_runner_3_config
+  gitlab_runner_config_1:
+    name: ${DEMO_NAME}-gitlab_runner_config_1
+  gitlab_runner_config_2:
+    name: ${DEMO_NAME}-gitlab_runner_config_2
+  gitlab_runner_config_3:
+    name: ${DEMO_NAME}-gitlab_runner_config_3
   sonarqube_config:
     name: ${DEMO_NAME}-sonarqube_config
   sonarqube_data:
@@ -76,15 +76,15 @@ services:
       - ./gitlab-post-reconfigure.sh:/etc/gitlab/post-reconfigure.sh:ro
 
   # The runners
-  gitlab-runner:
-    container_name: ${DEMO_NAME}-gitlab-runner
+  gitlab-runner-1:
+    container_name: ${DEMO_NAME}-gitlab-runner-1
     depends_on:
       - gitlab
     hostname: gitlab-runner
     image: gitlab/gitlab-runner:latest
     restart: unless-stopped
     volumes:
-      - gitlab_runner_config:/etc/gitlab-runner
+      - gitlab_runner_config_1:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
       - dependency-check:/usr/share/dependency-check/data
 
@@ -96,7 +96,7 @@ services:
     image: gitlab/gitlab-runner:latest
     restart: unless-stopped
     volumes:
-      - gitlab_runner_2_config:/etc/gitlab-runner
+      - gitlab_runner_config_2:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
       - dependency-check:/usr/share/dependency-check/data
 
@@ -108,61 +108,9 @@ services:
     image: gitlab/gitlab-runner:latest
     restart: unless-stopped
     volumes:
-      - gitlab_runner_3_config:/etc/gitlab-runner
+      - gitlab_runner_config_3:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
       - dependency-check:/usr/share/dependency-check/data
-
-  # Ephemeral containers which registers the runners
-  gitlab-runner-registrar:
-    container_name: ${DEMO_NAME}-gitlab-runner-registrar
-    depends_on:
-      - gitlab-runner
-    entrypoint: /root/entrypoint.sh
-    # Ensure that the script has access to the variable as defined in .env
-    environment:
-      - EXTERNAL_URL
-      - REGISTRATION_TOKEN
-    # Hostname needs to be similar to the runner it's registering
-    hostname: gitlab-runner
-    image: gitlab/gitlab-runner:latest
-    volumes:
-      - gitlab_runner_config:/etc/gitlab-runner
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./gitlab-runner-registrar.sh:/root/entrypoint.sh:ro
-
-  gitlab-runner-2-registrar:
-    container_name: ${DEMO_NAME}-gitlab-runner-2-registrar
-    depends_on:
-      - gitlab-runner-2
-    entrypoint: /root/entrypoint.sh
-    # Ensure that the script has access to the variable as defined in .env
-    environment:
-      - EXTERNAL_URL
-      - REGISTRATION_TOKEN
-    # Hostname needs to be similar to the runner it's registering
-    hostname: gitlab-runner-2
-    image: gitlab/gitlab-runner:latest
-    volumes:
-      - gitlab_runner_2_config:/etc/gitlab-runner
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./gitlab-runner-registrar.sh:/root/entrypoint.sh:ro
-
-  gitlab-runner-3-registrar:
-    container_name: ${DEMO_NAME}-gitlab-runner-3-registrar
-    depends_on:
-      - gitlab-runner-3
-    entrypoint: /root/entrypoint.sh
-    # Ensure that the script has access to the variable as defined in .env
-    environment:
-      - EXTERNAL_URL
-      - REGISTRATION_TOKEN
-    # Hostname needs to be similar to the runner it's registering
-    hostname: gitlab-runner-3
-    image: gitlab/gitlab-runner:latest
-    volumes:
-      - gitlab_runner_3_config:/etc/gitlab-runner
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./gitlab-runner-registrar.sh:/root/entrypoint.sh:ro
 
   # Sonarqube
   sonarqube:
