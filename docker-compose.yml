@@ -58,7 +58,6 @@ services:
         nginx['client_max_body_size'] = '0'
         puma['port'] = 3456
         prometheus_monitoring['enable'] = false
-        gitlab_rails['initial_shared_runners_registration_token'] = "${REGISTRATION_TOKEN}"
       GITLAB_POST_RECONFIGURE_SCRIPT: /etc/gitlab/post-reconfigure.sh
     hostname: gitlab
     image: gitlab/gitlab-ce:${GITLAB_CE_VERSION}
