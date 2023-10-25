@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.6.0](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/compare/1.5.0...1.6.0) (2023-10-25)
+
+
+### Features
+
+* add script to register runners using a runner token ([6ee389a](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/commit/6ee389a1cc051c845f832bc49640be699081c849))
+* remove auto registration token and scripts ([c008191](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/commit/c00819149c3307e8399214e311d3900b005f16da))
+* rename runners and configuration volumes ([aceba3c](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/commit/aceba3cd2ad487f43f721ebdb74e0cfe493ad3c2))
+* update versions of Docker images ([aaff903](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/commit/aaff9035429fe091363f1314d86e6e0184dc1772))
+
 ## [1.5.0](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/compare/1.4.1...1.5.0) (2023-08-03)
 
 
