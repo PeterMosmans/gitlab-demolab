@@ -19,14 +19,14 @@ All variables are stored in an ``.env`` file:
 ::
 
    DEMO_NAME=my-demo
+   DIND_VERSION=24.0.6
    EXTERNAL_URL=http://gitlab:8080/
-   GITLAB_CE_VERSION=16.2.2-ce.0
-   SONARQUBE_VERSION=10.1-community
+   GITLAB_CE_VERSION=16.5.0-ce.0
+   SONARQUBE_VERSION=10.2.1-community
    SONARQUBE_PASSWORD=sonarqubeadminpassword
    SONARQUBE_PORT=9000
    HTTP_PORT=8080
-   GITLAB_PASSWORD=minimum-12-COMPLEX
-   REGISTRATION_TOKEN=a-random-token-to-register-gitlab-runners
+   GITLAB_PASSWORD=minimmm-12-COMPLXX
    SSH_PORT=7722
 
 The ``.env`` file itself not supplied in this repository, but an example is: To
@@ -44,8 +44,16 @@ fail, see https://about.gitlab.com/handbook/security/password-standard.html
    ./installer.sh
 
 This will fire up an instance of GitLab, three GitLab runners, capable of
-performing Docker-in-Docker commands, and SonarQube. The registration of the
-GitLab runners will be performed automatically.
+performing Docker-in-Docker commands, and SonarQube.
+
+Then, you'll need to register the runners with a valid runner token, which needs
+to be created manually: Go to the Admin Area, click on Shared Runners, and click
+on New instance runner (``/admin/runners/new``).  Select "Run untagged jobs" and
+click on Create runner. This will generate a new runner token. Copy the token.
+
+Then, execute the ``register-runners.sh`` script with that token as
+parameter. This script will register all runners that are up and running.
+
 
 Stopping / pausing the demolab
 ==============================
