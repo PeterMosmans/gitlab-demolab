@@ -32,14 +32,14 @@ https://about.gitlab.com/handbook/security/password-standard.html
 This will fire up an instance of GitLab, three GitLab runners, capable of
 performing Docker-in-Docker commands, and SonarQube.
 
-Then, you'll need to register the runners with a valid runner token, which needs
-to be created manually: Go to the Admin Area, click on Shared Runners, and click
-on New instance runner (``/admin/runners/new``).  Select "Run untagged jobs" and
-click on Create runner. This will generate a new runner token. Copy the token.
+Then, you'll need to register the (group of) runners with a valid runner token,
+which needs to be created manually: Go to the Admin Area / Dashboard, click on
+Shared Runners, and click on New instance runner (``/admin/runners/new``).
+Select "Run untagged jobs" and click on Create runner. This will generate a new
+runner token. Copy the token.
 
 Then, execute the ``register-runners.sh`` script with that token as
 parameter. This script will register all runners that are up and running.
-
 
 Stopping / pausing the demolab
 ==============================
@@ -66,21 +66,37 @@ Variables
 The ``DEMO_NAME`` allows you to run multiple instances of this demo on the same
 machine, as it will generate its own "Docker namespace".
 
-``GITLAB_CE_VERSION`` allows you to specify which GitLab image you would like to
-use. Please note that the runners always use the latest version.
+``DIND_VERSION`` defines the Docker-in-Docker image tag being used.
+
+``GITLAB_HOSTNAME`` defines the hostname that will be used to access
+GitLab. Please note that this name needs to be resolved, see the remarks at the
+bottom of this page.
+
+``GITLAB_PASSWORD`` defines the initial password for user ``root``.
+
+``GITLAB_PORT`` defines the port number on which the web interface of GitLab
+will be accessible.
+
+``GITLAB_SSH`` defines the SSH port number for GitLab.
+
+``GITLAB_VERSION`` defines the GitLab image tag being used. Please note that the
+runners always use the latest version.
+
+``SONARQUBE_HOSTNAME`` defines the hostname that will be used to access
+SonarQube. Please note that this name needs to be resolved, see the remarks at the
+bottom of this page.
+
+``SONARQUBE_PASSWORD`` defines the initial password for user ``admin``.
+
+``SONARQUBE_PORT`` defines the port number on which the web interface of
+SonarQube will be accessible.
 
 ``SONARQUBE_VERSION`` allows you to specify which SonarQube image you would like
 to use.
 
-``SONARQUBE_PASSWORD`` is the initial password for the admin user of SonarQube.
+**Important!**
 
-``SONARQUBE_PORT`` specifies on which port SonarQube can be accessed.
-
-``HTTP_PORT`` specifies on which port the GitLab webinterface can be accessed.
-
-The ``SSH`` port is the SSH port for GitLab.
-
-If you want to access the webinterface, make sure that the ``EXTERNAL_URL`` can
-be resolved by your browser. If you choose any other value than ``localhost``,
-make sure that the hostname can be resolved (e.g. by adding it to the ``hosts``
-file).
+If you want to access the web interfaces using "pretty host names" that are
+defined using ``GITLAB_HOSTNAME`` and ``SONARQUBE_HOSTNAME`` (instead of
+``localhost``), then make sure that they can be resolved by your browser. This
+can be done for instance by adding them to your local ``hosts`` file.
