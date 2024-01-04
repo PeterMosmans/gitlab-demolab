@@ -1,21 +1,22 @@
 #!/bin/bash
 
-# Register GitLab runners with a runner token
+# Register GitLab runners with a runner (group) token
 
-# Copyright (C) 2023 Peter Mosmans [Go Forward]
+# Copyright (C) 2023-2024 Peter Mosmans [Go Forward]
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # Usage: register-runners.sh TOKEN
 
 # shellcheck disable=SC1091
 source .env
+# Ensure that all variables are defined
 set -u
 token=$1
-for runner in $(docker-compose ps|awk '/-runner/{print $1}'); do
-echo "Trying to register runner on $runner"
-docker exec -it "$runner" /bin/bash -c "/usr/bin/gitlab-runner register \
+for runner in $(docker-compose ps | awk '/-runner/{print $1}'); do
+  echo "Trying to register runner on $runner"
+  docker exec -it "$runner" /bin/bash -c "/usr/bin/gitlab-runner register \
 --non-interactive \
---url ${EXTERNAL_URL} \
+--url http://${GITLAB_HOSTNAME}:${GITLAB_PORT} \
 --description $runner \
 --docker-image docker:${DIND_VERSION} \
 --docker-network-mode ${DEMO_NAME}-network \
@@ -26,4 +27,3 @@ docker exec -it "$runner" /bin/bash -c "/usr/bin/gitlab-runner register \
 --non-interactive \
 --token ${token}"
 done
-
