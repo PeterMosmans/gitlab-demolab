@@ -98,5 +98,4 @@ be done for instance by adding them to your local `hosts` file.
 # Copyright / License
 
 Great that you're using this code! All that I'm asking is that you properly
-attribute the author (Peter Mosmans), and respect the GPLv3 license (see
-[[LICENSE]]).
+attribute the author (Peter Mosmans), and respect the [GPLv3 license](LICENSE).
