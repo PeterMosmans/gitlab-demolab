@@ -25,6 +25,8 @@ if curl --version 1> /dev/null 2>&1; then
     if ((exitcode == 6)); then
       echo "$name could not be resolved: Please check your hosts file or edit the .env file"
       exit 0
+    else
+      echo "$name successfully resolved"
     fi
   done
 else
