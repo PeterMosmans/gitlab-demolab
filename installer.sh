@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 # Start up demo lab
-
-# Copyright (C) 2023-2024 Peter Mosmans [Go Forward]
+# Part of https://github.com/PeterMosmans/gitlab-demolab
+#
+# Copyright (C) 2022-2024 Peter Mosmans [Go Forward]
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # As soon as we encounter an error, stop

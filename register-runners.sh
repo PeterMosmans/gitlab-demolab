@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Register GitLab runners with a runner (group) token
-
+# Part of https://github.com/PeterMosmans/gitlab-demolab
+#
 # Copyright (C) 2023-2024 Peter Mosmans [Go Forward]
 # SPDX-License-Identifier: GPL-3.0-or-later
 

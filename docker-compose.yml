@@ -1,4 +1,10 @@
 ---
+# Basic docker-compose file to start a GitLab demo network
+# Part of https://github.com/PeterMosmans/gitlab-demolab
+#
+# Copyright (C) 2022-2024 Peter Mosmans [Go Forward]
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 version: "3.5"
 
 networks:
