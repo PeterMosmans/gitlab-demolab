@@ -12,6 +12,12 @@ set -e
 COMPOSE=$(which docker-compose)
 compose_file="docker-compose.yml"
 
+# Check if there already is an .env file
+if [[ ! -f .env ]]; then
+  echo "No .env file found, copying env-example file to create one..."
+  cp env-example .env
+fi
+
 # shellcheck disable=SC1091
 source .env
 
