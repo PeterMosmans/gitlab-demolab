@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.0.0](https://github.com/PeterMosmans/gitlab-demolab/compare/1.6.0...2.0.0) (2024-01-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* check whether hostname can be resolved
+
+### Features
+
+* automatically use supplied env-example file ([9163f41](https://github.com/PeterMosmans/gitlab-demolab/commit/9163f41b5698d15dcdb13f57f4ead3acacaff8ae))
+* be more verbose when resolving hosts ([e99e22f](https://github.com/PeterMosmans/gitlab-demolab/commit/e99e22fe73e807a01281f45e9a221cca2fc4999a))
+* check whether hostname can be resolved ([408a737](https://github.com/PeterMosmans/gitlab-demolab/commit/408a737000196cd653204d4ea8342fead1a5fc72))
+* update gitlab version tag ([915d8d4](https://github.com/PeterMosmans/gitlab-demolab/commit/915d8d4caf5fd99c30ca48c8725079559f59e56a))
+* update versions ([fe3b5be](https://github.com/PeterMosmans/gitlab-demolab/commit/fe3b5be03f2d3c213e011b238d1ef4a5abf5cb72))
+* update versions and use localhost by default ([bd18a70](https://github.com/PeterMosmans/gitlab-demolab/commit/bd18a708171360920587c8df8b04877a9d5d95b4))
+
+
+### Bug Fixes
+
+* pass correct variables to gitlab runner ([c99b753](https://github.com/PeterMosmans/gitlab-demolab/commit/c99b75398c9f9ded64af956f6a153d342a3cc483))
+
 ## [1.6.0](https://git.go-forward.net/PeterMosmans/gitlab-demolab/-/compare/1.5.0...1.6.0) (2023-10-25)
 
 
