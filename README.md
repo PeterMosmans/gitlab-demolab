@@ -17,11 +17,10 @@ GitLab passwords), and you\'re good to go. Note that the GITLAB_PASSWORD needs
 to be complex, otherwise installation will fail, see
 <https://about.gitlab.com/handbook/security/password-standard.html>
 
+If you don't create an `.env` file before using the installer, it will
+automatically copy and use the `env-example` file for you.
+
 ```console
-cp env-example .env
-
-# Edit the values in .env
-
 ./installer.sh
 ```
 
