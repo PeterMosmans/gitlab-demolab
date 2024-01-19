@@ -13,9 +13,8 @@ Have `docker` and `docker-compose` installed.
 All variables are stored in an `.env` file: The `.env` file itself not supplied
 in this repository, but an example is: To quickly get started, copy the file
 `env-example` file to `.env`, edit the values (especially the SonarQube and
-GitLab passwords), and you\'re good to go. Note that the GITLAB_PASSWORD needs
-to be complex, otherwise installation will fail, see
-<https://about.gitlab.com/handbook/security/password-standard.html>
+GitLab passwords), make sure that `gitlab` resolves to localhost, and you\'re
+good to go.
 
 If you don't create an `.env` file before using the installer, it will
 automatically copy and use the `env-example` file for you.
@@ -75,6 +74,10 @@ be accessible.
 `GITLAB_VERSION` defines the GitLab image tag being used. Please note that the
 runners always use the latest version.
 
+`RUNNER_VOLUME` defines an extra (named) Docker volume that will be available
+for all runners. By default this is set to create / use a shared volume to store
+OWASP Dependency Check data on.
+
 `SONARQUBE_HOSTNAME` defines the hostname that will be used to access SonarQube.
 Please note that this name needs to be resolved, see the remarks at the bottom
 of this page.
@@ -94,7 +97,12 @@ defined using `GITLAB_HOSTNAME` and `SONARQUBE_HOSTNAME` (instead of
 `localhost`), then make sure that they can be resolved by your browser. This can
 be done for instance by adding them to your local `hosts` file.
 
+Note that the GITLAB_PASSWORD needs to be complex, otherwise
+installation will fail, see
+<https://about.gitlab.com/handbook/security/password-standard.html>
+
 # Copyright / License
 
-Great that you're using this code! All that I'm asking is that you properly
-attribute the author (Peter Mosmans), and respect the [GPLv3 license](LICENSE).
+Great that you're using this code, hopefully you find it useful! All that I'm
+asking is that you properly attribute the author (Peter Mosmans), and respect
+the [GPLv3 license](LICENSE).
