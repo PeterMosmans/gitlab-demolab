@@ -91,7 +91,7 @@ services:
     volumes:
       - gitlab_runner_config_1:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
-      - dependency-check:/usr/share/dependency-check/data
+      - ${RUNNER_VOLUME}
 
   gitlab-runner-2:
     container_name: ${DEMO_NAME}-gitlab-runner-2
@@ -103,7 +103,7 @@ services:
     volumes:
       - gitlab_runner_config_2:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
-      - dependency-check:/usr/share/dependency-check/data
+      - ${RUNNER_VOLUME}
 
   gitlab-runner-3:
     container_name: ${DEMO_NAME}-gitlab-runner-3
@@ -115,7 +115,7 @@ services:
     volumes:
       - gitlab_runner_config_3:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
-      - dependency-check:/usr/share/dependency-check/data
+      - ${RUNNER_VOLUME}
 
   # Sonarqube
   sonarqube:

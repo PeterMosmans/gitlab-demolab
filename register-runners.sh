@@ -20,12 +20,14 @@ for runner in $(docker-compose ps | awk '/-runner/{print $1}'); do
   docker exec -it "$runner" /bin/bash -c "/usr/bin/gitlab-runner register \
 --non-interactive \
 --url http://gitlab:${GITLAB_PORT} \
+--clone-url http://gitlab:${GITLAB_PORT} \
 --description $runner \
 --docker-image docker:${DIND_VERSION} \
 --docker-network-mode ${DEMO_NAME}-network \
 --docker-privileged \
 --docker-pull-policy if-not-present \
 --docker-volumes /var/run/docker.sock:/var/run/docker.sock \
+--docker-volumes ${RUNNER_VOLUME} \
 --executor docker \
 --non-interactive \
 --token ${token}"
