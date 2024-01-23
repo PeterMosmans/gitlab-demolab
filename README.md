@@ -1,8 +1,8 @@
 # GitLab Demolab
 
 This repository contains all files to set up a local network, consisting of a
-CI/CD GitLab server, multiple (docker-in-docker compatible) GitLab runners, as
-well as SonarQube.
+CI/CD GitLab server and multiple (docker-in-docker compatible) GitLab runners.
+Optionally, SonarQube as well as Dependency-Track can be set up.
 
 ## Prerequisites
 
@@ -23,8 +23,8 @@ automatically copy and use the `env-example` file for you.
 ./installer.sh
 ```
 
-This will fire up an instance of GitLab, three GitLab runners, capable of
-performing Docker-in-Docker commands, and SonarQube.
+This will fire up an instance of GitLab, and three GitLab runners, capable of
+performing Docker-in-Docker commands.
 
 Then, you\'ll need to register the (group of) runners with a valid runner token,
 which needs to be created manually: Go to the Admin Area / Dashboard, click on
@@ -35,10 +35,28 @@ runner token. Copy the token.
 Lastly, execute the `register-runners.sh` script with that token as parameter.
 This script will register all runners that are up and running.
 
+## Starting SonarQube
+
+```console
+./installer.sh sonarqube
+```
+
+## Starting Dependency-Track
+
+```console
+./installer.sh dtrack
+```
+
 ## Stopping / pausing the demolab
 
 ```console
-docker-compose stop
+./installer.sh stop
+```
+
+## Removing the demolab
+
+```console
+./installer.sh down
 ```
 
 By default all data, configuration and logs will be stored in persistent Docker
@@ -59,6 +77,15 @@ The `DEMO_NAME` allows you to run multiple instances of this demo on the same
 machine, as it will generate its own \"Docker namespace\".
 
 `DIND_VERSION` defines the Docker-in-Docker image tag being used.
+
+`DTRACK_API_PORT` defines the port number of the Dependency-Track API interface.
+
+`DTRACK_API_VERSION` defines the Dependency-Track API image tag.
+
+`DTRACK_FRONTEND_PORT` defines the port number on which the web interface of
+Dependency-Track will be accessible.
+
+`DTRACK_FRONTEND_VERSION` defines the Dependency-Track frontend image tag.
 
 `GITLAB_HOSTNAME` defines the hostname that will be used to access GitLab.
 Please note that this name needs to be resolved, see the remarks at the bottom
