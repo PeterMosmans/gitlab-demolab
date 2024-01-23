@@ -14,6 +14,8 @@ networks:
 volumes:
   dependency-check:
     name: ${DEMO_NAME}-dependency-check
+  dependency-track:
+    name: ${DEMO_NAME}-dependency-track
   gitlab_config:
     name: ${DEMO_NAME}-gitlab_config
   gitlab_data:
@@ -135,3 +137,27 @@ services:
       - sonarqube_extensions:/opt/sonarqube/extensions
       - sonarqube_logs:/opt/sonarqube/logs
       - sonarqube_temp:/opt/sonarqube/temp
+
+  dtrack-frontend:
+    image: dependencytrack/frontend:${DTRACK_FRONTEND_VERSION}
+    depends_on:
+      - dtrack-apiserver
+    environment:
+      - API_BASE_URL=http://${DTRACK_HOSTNAME}:${DTRACK_API_PORT}
+    ports:
+      - "127.0.0.1:${DTRACK_FRONTEND_PORT}:8080"
+    restart: unless-stopped
+
+  dtrack-apiserver:
+    image: dependencytrack/apiserver:${DTRACK_API_VERSION}
+    deploy:
+      resources:
+        limits:
+          memory: 12288m
+        reservations:
+          memory: 8192m
+    ports:
+      - "${DTRACK_API_PORT}:8080"
+    volumes:
+      - dependency-track:/data
+    restart: unless-stopped
