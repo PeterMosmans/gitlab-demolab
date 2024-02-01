@@ -125,7 +125,7 @@ fix_permissions() {
 setup
 validate_hostnames
 start_gitlab
-configure_sonarqube
+
 # Check if a parameter has been passed
 if [[ $# -ne 0 ]]; then
   if [[ $1 == stop ]]; then
