@@ -10,21 +10,20 @@ Have `docker` and `docker-compose` installed.
 
 ## Usage
 
-All variables are stored in an `.env` file: The `.env` file itself not supplied
-in this repository, but an example is: To quickly get started, copy the file
-`env-example` file to `.env`, edit the values (especially the SonarQube and
-GitLab passwords), make sure that `gitlab` resolves to localhost, and you\'re
-good to go.
-
-If you don't create an `.env` file before using the installer, it will
-automatically copy and use the `env-example` file for you.
-
 ```console
 ./installer.sh
 ```
 
-This will fire up an instance of GitLab, and three GitLab runners, capable of
+This will fire up an instance of GitLab, and two GitLab runners, capable of
 performing Docker-in-Docker commands.
+
+All variables are stored in an `.env` file: The `.env` file itself not supplied
+in this repository, but an example is: To quickly get started, copy the file
+`env-example` file to `.env`, edit the values (especially the SonarQube and
+GitLab passwords), and you\'re good to go.
+
+If you don't create an `.env` file before using the installer, it will
+automatically copy and use the `env-example` file for you.
 
 Then, you\'ll need to register the (group of) runners with a valid runner token,
 which needs to be created manually: Go to the Admin Area / Dashboard, click on
@@ -69,7 +68,11 @@ docker-compose down --remove-orphans --volumes
 
 Please note that this is a lab setup - and not meant to be used in production in
 any way. All services only bind / listen to `127.0.0.1` by default (this can be
-changed in the file `docker-compose`
+changed in the file `docker-compose`.
+
+Furthermore all runners share one named Docker volume as cache under
+`/srv/cache`. This named volume will be initialized by default, and has lax
+permissions (to ensure all tools can work with it).
 
 ## Variables
 
@@ -101,15 +104,14 @@ be accessible.
 `GITLAB_VERSION` defines the GitLab image tag being used. Please note that the
 runners always use the latest version.
 
-`RUNNER_VOLUME` defines an extra (named) Docker volume that will be available
-for all runners. By default this is set to create / use a shared volume to store
-OWASP Dependency Check data on.
-
 `SONARQUBE_HOSTNAME` defines the hostname that will be used to access SonarQube.
 Please note that this name needs to be resolved, see the remarks at the bottom
 of this page.
 
 `SONARQUBE_PASSWORD` defines the initial password for user `admin`.
+
+`SONARQUBE_PLUGINS` defines a space-delimited list of SonarQube plugins that
+will be installed at first startup.
 
 `SONARQUBE_PORT` defines the port number on which the web interface of SonarQube
 will be accessible.
@@ -124,9 +126,8 @@ defined using `GITLAB_HOSTNAME` and `SONARQUBE_HOSTNAME` (instead of
 `localhost`), then make sure that they can be resolved by your browser. This can
 be done for instance by adding them to your local `hosts` file.
 
-Note that the GITLAB_PASSWORD needs to be complex, otherwise
-installation will fail, see
-<https://about.gitlab.com/handbook/security/password-standard.html>
+Note that the GITLAB_PASSWORD needs to be complex, otherwise installation will
+fail, see <https://about.gitlab.com/handbook/security/password-standard.html>
 
 # Copyright / License
 
