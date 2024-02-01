@@ -12,8 +12,6 @@ networks:
     name: ${DEMO_NAME}-network
 
 volumes:
-  dependency-check:
-    name: ${DEMO_NAME}-dependency-check
   dependency-track:
     name: ${DEMO_NAME}-dependency-track
   gitlab_config:
@@ -26,8 +24,8 @@ volumes:
     name: ${DEMO_NAME}-gitlab_runner_config_1
   gitlab_runner_config_2:
     name: ${DEMO_NAME}-gitlab_runner_config_2
-  gitlab_runner_config_3:
-    name: ${DEMO_NAME}-gitlab_runner_config_3
+  runner_cache:
+    name: runner_cache
   sonarqube_config:
     name: ${DEMO_NAME}-sonarqube_config
   sonarqube_data:
@@ -93,7 +91,7 @@ services:
     volumes:
       - gitlab_runner_config_1:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${RUNNER_VOLUME}
+      - runner_cache:/srv/cache:z
 
   gitlab-runner-2:
     container_name: ${DEMO_NAME}-gitlab-runner-2
@@ -105,19 +103,7 @@ services:
     volumes:
       - gitlab_runner_config_2:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${RUNNER_VOLUME}
-
-  gitlab-runner-3:
-    container_name: ${DEMO_NAME}-gitlab-runner-3
-    depends_on:
-      - gitlab
-    hostname: gitlab-runner-3
-    image: gitlab/gitlab-runner:latest
-    restart: unless-stopped
-    volumes:
-      - gitlab_runner_config_3:/etc/gitlab-runner
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ${RUNNER_VOLUME}
+      - runner_cache:/srv/cache:z
 
   # Sonarqube
   sonarqube:
