@@ -27,7 +27,7 @@ for runner in $(docker-compose ps | awk '/-runner/{print $1}'); do
 --docker-privileged \
 --docker-pull-policy if-not-present \
 --docker-volumes /var/run/docker.sock:/var/run/docker.sock \
---docker-volumes ${RUNNER_VOLUME} \
+--docker-volumes runner-cache:/srv/cache:z \
 --executor docker \
 --non-interactive \
 --token ${token}"
