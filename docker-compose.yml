@@ -1,16 +1,18 @@
 ---
-# Basic docker-compose file to start a GitLab demo network
-# Part of https://github.com/PeterMosmans/gitlab-demolab
-#
 # Copyright (C) 2022-2024 Peter Mosmans [Go Forward]
 # SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Basic docker-compose file to start a GitLab demo network
+# Part of https://github.com/PeterMosmans/gitlab-demolab
 
 version: "3.5"
 
+# All services need to be part of the same network for communication
 networks:
   default:
     name: ${DEMO_NAME}-network
 
+# Volumes survive reboots and restarts
 volumes:
   dependency-track:
     name: ${DEMO_NAME}-dependency-track
@@ -25,7 +27,9 @@ volumes:
   gitlab_runner_config_2:
     name: ${DEMO_NAME}-gitlab_runner_config_2
   runner_cache:
-    name: runner_cache
+    name: ${DEMO_NAME}-runner_cache
+    labels:
+      net.go-forward.description: "Shared cache amongst GitLab runners"
   sonarqube_config:
     name: ${DEMO_NAME}-sonarqube_config
   sonarqube_data:
@@ -105,14 +109,10 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - runner_cache:/srv/cache:z
 
-  # Sonarqube
+  # SonarQube
   sonarqube:
     container_name: ${DEMO_NAME}-sonarqube
     image: sonarqube:${SONARQUBE_VERSION}
-    networks:
-      default:
-        aliases:
-          - sonarqube.demo.local
     ports:
       - "127.0.0.1:${SONARQUBE_PORT}:9000"
     restart: unless-stopped
@@ -124,6 +124,7 @@ services:
       - sonarqube_logs:/opt/sonarqube/logs
       - sonarqube_temp:/opt/sonarqube/temp
 
+  # Dependency-Track web interface
   dtrack-frontend:
     image: dependencytrack/frontend:${DTRACK_FRONTEND_VERSION}
     depends_on:
@@ -134,6 +135,7 @@ services:
       - "127.0.0.1:${DTRACK_FRONTEND_PORT}:8080"
     restart: unless-stopped
 
+  # Dependency-Track API server
   dtrack-apiserver:
     image: dependencytrack/apiserver:${DTRACK_API_VERSION}
     deploy:
@@ -143,7 +145,7 @@ services:
         reservations:
           memory: 8192m
     ports:
-      - "${DTRACK_API_PORT}:8080"
+      - "127.0.0.1:${DTRACK_API_PORT}:8080"
     volumes:
       - dependency-track:/data
     restart: unless-stopped
