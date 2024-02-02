@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.1.0](https://github.com/PeterMosmans/gitlab-demolab/compare/2.0.0...2.1.0) (2024-02-02)
+
+
+### Features
+
+* add Dependency-Track Docker images ([aab412a](https://github.com/PeterMosmans/gitlab-demolab/commit/aab412a898bf3d4ccc575a3b2305162075f64496))
+* add Dependency-Track variables ([e6384dc](https://github.com/PeterMosmans/gitlab-demolab/commit/e6384dcca37e56bd2f827122d338b26644987b56))
+* parameterize extra shared Runner volume ([39596b5](https://github.com/PeterMosmans/gitlab-demolab/commit/39596b52e06baf1499be7735b718cc597c2f98e6))
+* split out startup of services in installation file ([887676e](https://github.com/PeterMosmans/gitlab-demolab/commit/887676e072149e3d26ba52258e4b9e6aea1da45d))
+* support shared Runner caches ([5c78706](https://github.com/PeterMosmans/gitlab-demolab/commit/5c78706f05c1d7decd1730f3c6b71a5862e6ad60))
+* update GitLab version ([f2430df](https://github.com/PeterMosmans/gitlab-demolab/commit/f2430dfa9d0a1e233362e526012966072c0ebc59))
+* update versions and add SonarQube plugins ([b8e0524](https://github.com/PeterMosmans/gitlab-demolab/commit/b8e0524a9f325f808f2402f065ac716afdce93aa))
+* use named cache volume for runners ([4d3a351](https://github.com/PeterMosmans/gitlab-demolab/commit/4d3a351ff371a31e0686507210b27cc878aaa19a))
+* use two runners with shared cache instead of three ([41b335e](https://github.com/PeterMosmans/gitlab-demolab/commit/41b335e3ab59ae481f6a7b0745afa84f90720837))
+
+
+### Bug Fixes
+
+* ensure that gitlab service name is being used for registration ([ecedc2e](https://github.com/PeterMosmans/gitlab-demolab/commit/ecedc2ed893d678962542ce5971275b8bb3edb7f))
+* only configure SonarQube during the first run ([8b26e4a](https://github.com/PeterMosmans/gitlab-demolab/commit/8b26e4a9308647114c72abc1bc1a01f8862adcc3))
+
 ## [2.0.0](https://github.com/PeterMosmans/gitlab-demolab/compare/1.6.0...2.0.0) (2024-01-17)
 
 
