@@ -15,14 +15,23 @@
 
 set -u
 
+COL_BOLD="\033[1m"
+COL_GREEN="\033[32m"
+COL_RED="\033[0;31m"
+COL_RESET="\033[0m"
+COL_YELLOW="\033[0;33m"
+
 COMPOSE=$(which docker-compose)
 compose_file="docker-compose.yml"
 
 setup() {
   # Check if there already is an .env file
   if [[ ! -f .env ]]; then
-    echo "No .env file found, copying env-example file to create one..."
+    echo -e "No ${COL_BOLD}.env${COL_RESET} file found, copying env-example file to create one..."
     cp env-example .env
+    echo -e "Default ${COL_BOLD}.env${COL_RESET} file created..."
+  else
+    echo -e "${COL_GREEN}Found existing .env file...${COL_RESET}"
   fi
 
   # shellcheck disable=SC1091
@@ -32,28 +41,28 @@ setup() {
 
 validate_hostnames() {
   if ! curl --version 1> /dev/null 2>&1; then
-    echo "curl is not installed - unable to verify the hostnames or change initial passwords"
+    echo -e "${COL_RED}curl is not installed - unable to verify the hostnames or change initial passwords${COL_RESET}"
   else
     for name in ${DTRACK_HOSTNAME} ${GITLAB_HOSTNAME} ${SONARQUBE_HOSTNAME}; do
       # Note that the port number doesn't matter - we're checking whether it can be resolved
       curl --silent "http://${name}:${GITLAB_PORT}/" --output /dev/null 1> /dev/null 2>&1
       exitcode=$?
       if ((exitcode == 6)); then
-        echo "$name could not be resolved: Please check your hosts file or edit the .env file"
+        echo -e "${COL_RED}$name could not be resolved${COL_RESET}: Please check your hosts file or edit the .env file"
       fi
     done
   fi
 }
 
 wait_for_gitlab() {
-  echo "Waiting for GitLab to come up online..."
+  echo "Waiting on GitLab to come up online..."
   while [[ $(
     "$COMPOSE" -f "$compose_file" logs gitlab 2> /dev/null | grep -q "Server initialized"
     echo $?
   ) -ne 0 ]]; do
     sleep 1
   done
-  echo "You can now log in to GitLab at http://${GITLAB_HOSTNAME}:${GITLAB_PORT} as root using password ${GITLAB_PASSWORD}"
+  echo -e "You can now log in to GitLab at ${COL_BOLD}http://${GITLAB_HOSTNAME}:${GITLAB_PORT}${COL_RESET} as ${COL_BOLD}root${COL_RESET} using password ${COL_BOLD}${GITLAB_PASSWORD}${COL_RESET}"
   echo "If you haven't done already: Don't forget to create a runner token and register the runners manually"
   echo "Usage: ./register-runners.sh TOKEN"
 }
@@ -64,7 +73,7 @@ start_dependency-track() {
     docker volume inspect "${DEMO_NAME}-dependency-track" 1> /dev/null 2>&1
     echo $?
   )
-  echo "Starting Dependency-Track"
+  echo -e "Starting ${COL_BOLD}Dependency-Track${COL_RESET}"
   "$COMPOSE" -f "$compose_file" up --detach dtrack-apiserver dtrack-frontend
   echo "Waiting on Dependency-Track to come up online..."
   while [[ $(
@@ -74,15 +83,15 @@ start_dependency-track() {
     sleep 1
   done
   if [[ $configured -ne 0 ]]; then
-    echo "Changing default admin password to ${DTRACK_PASSWORD}"
+    echo -e "Changing default admin password to ${COL_BOLD}${DTRACK_PASSWORD}${COL_RESET}"
     curl -d "username=admin" -d "password=admin" -d "newPassword=${DTRACK_PASSWORD}" -d "confirmPassword=${DTRACK_PASSWORD}" \
       "http://${DTRACK_HOSTNAME}:${DTRACK_API_PORT}/api/v1/user/forceChangePassword"
   fi
-  echo "You now can log in to Dependency-Track at http://${DTRACK_HOSTNAME}:${DTRACK_FRONTEND_PORT} as admin using password ${DTRACK_PASSWORD}"
+  echo -e "You now can log in to Dependency-Track at ${COL_BOLD}http://${DTRACK_HOSTNAME}:${DTRACK_FRONTEND_PORT}${COL_RESET} as ${COL_BOLD}admin${COL_RESET} using password ${COL_BOLD}${DTRACK_PASSWORD}${COL_RESET}"
 }
 
 start_gitlab() {
-  echo "Starting GitLab"
+  echo -e "Starting ${COL_BOLD}GitLab${COL_RESET}"
   "$COMPOSE" -f "$compose_file" up --detach gitlab gitlab-runner-1 gitlab-runner-2
 }
 
@@ -102,7 +111,7 @@ start_sonarqube() {
     docker volume inspect "${DEMO_NAME}-sonarqube_config" 1> /dev/null 2>&1
     echo $?
   )
-  echo "Starting SonarQube..."
+  echo -e "Starting ${COL_BOLD}SonarQube${COL_RESET}"
   "$COMPOSE" -f "$compose_file" up --detach sonarqube
   echo "Waiting on SonarQube to come up online..."
   while [[ $(
@@ -114,37 +123,37 @@ start_sonarqube() {
   if [[ $configured -ne 0 ]]; then
     configure_sonarqube
   fi
-  echo "You now can log in to SonarQube at http://${SONARQUBE_HOSTNAME}:${SONARQUBE_PORT} as admin using password ${SONARQUBE_PASSWORD}"
+  echo -e "You now can log in to SonarQube at ${COL_BOLD}http://${SONARQUBE_HOSTNAME}:${SONARQUBE_PORT}${COL_RESET} as ${COL_BOLD}admin${COL_RESET} using password ${COL_BOLD}${SONARQUBE_PASSWORD}${COL_RESET}"
 }
 
 # Fix permissions on named volume: We want all tools to be able to use it
 fix_permissions() {
-  docker run --rm -it -v runner_cache:/srv/cache:z busybox /bin/sh -c "chmod o+rwx /srv/cache/"
+  docker run --rm -it -v "${DEMO_NAME}-runner_cache:/srv/cache:z" busybox /bin/sh -c "chmod o+rwx /srv/cache/"
 }
 
-setup
-validate_hostnames
-start_gitlab
+# Stop all services and exit
+stop_services() {
+  echo "Stopping all services..."
+  "$COMPOSE" -f "$compose_file" stop
+  exit 0
+}
 
-# Check if a parameter has been passed
-if [[ $# -ne 0 ]]; then
-  if [[ $1 == stop ]]; then
-    echo "Stopping all services..."
-    "$COMPOSE" -f "$compose_file" stop
-    exit 0
-  fi
-  if [[ $1 == sonarqube ]] || [[ $1 == all ]]; then
-    start_sonarqube
-  fi
-  if [[ $1 == dependency-track ]] || [[ $1 == all ]]; then
-    start_dependency-track
-  fi
-  if [[ $1 == remove ]]; then
-    echo "Removing all services..."
-    "$COMPOSE" -f "$compose_file" down
-    exit 0
+if (($# > 0)); then
+  [[ $1 == stop ]] && stop_services
+  setup
+  validate_hostnames
+  start_gitlab
+  [[ $1 == all ]] || [[ $1 == dependency-track ]] && start_dependency-track
+  [[ $1 == all ]] || [[ $1 == sonarqube ]] && start_sonarqube
+  fix_permissions
+  wait_for_gitlab
+  if [[ $1 != all ]] && [[ $1 != dependency-track ]] && [[ $1 != sonarqube ]]; then
+    echo -e "${COL_RED}Unknown option${COL_RESET} - this program only understands the following options:"
+    echo "(no options)       Start GitLab"
+    echo -e "${COL_YELLOW}dependency-track${COL_RESET}   Start Dependency-Track (and GitLab)"
+    echo -e "${COL_YELLOW}sonarqube${COL_RESET}          Start SonarQube (and GitLab)"
+    echo -e "${COL_YELLOW}all${COL_RESET}                Start Dependency-Track, SonarQube, and GitLab"
+    echo -e "${COL_YELLOW}stop${COL_RESET}               Stop all started services"
+    exit 1
   fi
 fi
-
-fix_permissions
-wait_for_gitlab
