@@ -27,6 +27,7 @@ for runner in $(docker-compose ps | awk '/-runner/{print $1}'); do
 --docker-pull-policy if-not-present \
 --docker-volumes /var/run/docker.sock:/var/run/docker.sock \
 --docker-volumes ${DEMO_NAME}-runner_cache:/srv/cache:z \
+--env "DOCKER_DRIVER=overlay2" \
 --executor docker \
 --non-interactive \
 --token ${token}"
