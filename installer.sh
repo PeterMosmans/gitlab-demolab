@@ -67,11 +67,6 @@ wait_for_gitlab() {
 }
 
 start_dependency-track() {
-  # Check if this is the first time that this service is started
-  configured=$(
-    docker volume inspect "${DEMO_NAME}-dependency-track" 1> /dev/null 2>&1
-    echo $?
-  )
   echo -e "Starting ${COL_BOLD}Dependency-Track${COL_RESET}"
   "$COMPOSE" -f "$compose_file" up --detach dtrack-apiserver dtrack-frontend
   echo "Waiting on Dependency-Track to come up online..."
@@ -81,12 +76,12 @@ start_dependency-track() {
   ) -ne 0 ]]; do
     sleep 1
   done
-  if [[ $configured -ne 0 ]]; then
-    echo -e "Changing default admin password to ${COL_BOLD}${DTRACK_PASSWORD}${COL_RESET}"
-    curl -d "username=admin" -d "password=admin" -d "newPassword=${DTRACK_PASSWORD}" -d "confirmPassword=${DTRACK_PASSWORD}" \
-      "http://${DTRACK_HOSTNAME}:${DTRACK_API_PORT}/api/v1/user/forceChangePassword"
+  status_code=$(curl --silent -o /dev/null -w '%{http_code}\n' -d "username=admin" -d "password=admin" -d "newPassword=${DTRACK_PASSWORD}" -d "confirmPassword=${DTRACK_PASSWORD}" \
+    "http://${DTRACK_HOSTNAME}:${DTRACK_API_PORT}/api/v1/user/forceChangePassword")
+  if [ "$status_code" -eq 200 ]; then
+    echo -e "Changed default ${COL_BOLD}admin${COL_RESET} password to ${COL_BOLD}${DTRACK_PASSWORD}${COL_RESET}"
   fi
-  echo -e "You now can log in to Dependency-Track at ${COL_BOLD}http://${DTRACK_HOSTNAME}:${DTRACK_FRONTEND_PORT}${COL_RESET} as ${COL_BOLD}admin${COL_RESET} using password ${COL_BOLD}${DTRACK_PASSWORD}${COL_RESET}"
+  echo -e "You now can log in to Dependency-Track at ${COL_BOLD}http://${DTRACK_HOSTNAME}:${DTRACK_FRONTEND_PORT}${COL_RESET}"
 }
 
 start_gitlab() {
@@ -95,21 +90,18 @@ start_gitlab() {
 }
 
 configure_sonarqube() {
-  echo "Changing default admin password to ${SONARQUBE_PASSWORD}"
-  curl -u admin:admin -X POST "http://${SONARQUBE_HOSTNAME}:${SONARQUBE_PORT}/api/users/change_password?login=admin&previousPassword=admin&password=${SONARQUBE_PASSWORD}"
-  echo "Installing the following plugins: ${SONARQUBE_PLUGINS}..."
-  # shellcheck disable=SC2140
-  "$COMPOSE" -f "$compose_file" exec sonarqube /bin/bash -c "for plugin in ${SONARQUBE_PLUGINS}; do curl --output-dir /opt/sonarqube/extensions/plugins/ -LO "\$plugin"; done"
-  echo "Restarting SonarQube..."
-  "$COMPOSE" -f "$compose_file" restart sonarqube
+  status_code=$(curl --silent -o /dev/null -w '%{http_code}\n' -u admin:admin -X POST "http://${SONARQUBE_HOSTNAME}:${SONARQUBE_PORT}/api/users/change_password?login=admin&previousPassword=admin&password=${SONARQUBE_PASSWORD}")
+  if [ "$status_code" -eq 204 ]; then
+    echo -e "Changed the default ${COL_BOLD}admin${COL_RESET} password to ${SONARQUBE_PASSWORD}"
+    echo "Installing the following plugins: ${SONARQUBE_PLUGINS}..."
+    # shellcheck disable=SC2140
+    "$COMPOSE" -f "$compose_file" exec sonarqube /bin/bash -c "for plugin in ${SONARQUBE_PLUGINS}; do curl --output-dir /opt/sonarqube/extensions/plugins/ -LO "\$plugin"; done"
+    echo "Restarting SonarQube..."
+    "$COMPOSE" -f "$compose_file" restart sonarqube
+  fi
 }
 
 start_sonarqube() {
-  # Check if this is the first time that this service is started
-  configured=$(
-    docker volume inspect "${DEMO_NAME}-sonarqube_config" 1> /dev/null 2>&1
-    echo $?
-  )
   echo -e "Starting ${COL_BOLD}SonarQube${COL_RESET}"
   "$COMPOSE" -f "$compose_file" up --detach sonarqube
   echo "Waiting on SonarQube to come up online..."
@@ -119,10 +111,8 @@ start_sonarqube() {
   ) -ne 0 ]]; do
     sleep 1
   done
-  if [[ $configured -ne 0 ]]; then
-    configure_sonarqube
-  fi
-  echo -e "You now can log in to SonarQube at ${COL_BOLD}http://${SONARQUBE_HOSTNAME}:${SONARQUBE_PORT}${COL_RESET} as ${COL_BOLD}admin${COL_RESET} using password ${COL_BOLD}${SONARQUBE_PASSWORD}${COL_RESET}"
+  configure_sonarqube
+  echo -e "You now can log in to SonarQube at ${COL_BOLD}http://${SONARQUBE_HOSTNAME}:${SONARQUBE_PORT}${COL_RESET}"
 }
 
 # Fix permissions on named volume: We want all tools to be able to use it
