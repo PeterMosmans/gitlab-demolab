@@ -28,7 +28,7 @@ setup() {
   if [[ ! -f .env ]]; then
     echo -e "No ${COL_BOLD}.env${COL_RESET} file found, copying env-example file to create one..."
     cp env-example .env
-    echo -e "${COL_GREEN}Default .env$ file created${COL_RESET}"
+    echo -e "${COL_GREEN}Default .env file created${COL_RESET}"
   else
     echo -e "${COL_GREEN}Found existing .env file...${COL_RESET}"
   fi
