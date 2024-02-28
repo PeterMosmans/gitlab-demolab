@@ -40,6 +40,7 @@ setup() {
 validate_hostnames() {
   if ! curl --version 1> /dev/null 2>&1; then
     echo -e "${COL_RED}curl is not installed - unable to verify the hostnames or change initial passwords${COL_RESET}"
+    echo -e "Please install ${COL_BOLD}curl${COL_RESET} to prevent configuration issues"
   else
     for name in ${DTRACK_HOSTNAME} ${GITLAB_HOSTNAME} ${SONARQUBE_HOSTNAME}; do
       # Note that the port number doesn't matter - we're checking whether it can be resolved
