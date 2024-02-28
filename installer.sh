@@ -11,7 +11,6 @@
 # sonarqube        Start (and configure) SonarQube
 # dependency-track Start (and configure) Dependency-Track
 # stop             Stop all services
-# remove           Remove all services
 
 set -u
 
@@ -29,14 +28,13 @@ setup() {
   if [[ ! -f .env ]]; then
     echo -e "No ${COL_BOLD}.env${COL_RESET} file found, copying env-example file to create one..."
     cp env-example .env
-    echo -e "Default ${COL_BOLD}.env${COL_RESET} file created..."
+    echo -e "${COL_GREEN}Default .env$ file created${COL_RESET}"
   else
     echo -e "${COL_GREEN}Found existing .env file...${COL_RESET}"
   fi
 
   # shellcheck disable=SC1091
   source .env
-
 }
 
 validate_hostnames() {
@@ -138,22 +136,24 @@ stop_services() {
   exit 0
 }
 
-if (($# > 0)); then
-  [[ $1 == stop ]] && stop_services
-  setup
-  validate_hostnames
-  start_gitlab
-  [[ $1 == all ]] || [[ $1 == dependency-track ]] && start_dependency-track
-  [[ $1 == all ]] || [[ $1 == sonarqube ]] && start_sonarqube
-  fix_permissions
-  wait_for_gitlab
-  if [[ $1 != all ]] && [[ $1 != dependency-track ]] && [[ $1 != sonarqube ]]; then
-    echo -e "${COL_RED}Unknown option${COL_RESET} - this program only understands the following options:"
-    echo "(no options)       Start GitLab"
-    echo -e "${COL_YELLOW}dependency-track${COL_RESET}   Start Dependency-Track (and GitLab)"
-    echo -e "${COL_YELLOW}sonarqube${COL_RESET}          Start SonarQube (and GitLab)"
-    echo -e "${COL_YELLOW}all${COL_RESET}                Start Dependency-Track, SonarQube, and GitLab"
-    echo -e "${COL_YELLOW}stop${COL_RESET}               Stop all started services"
-    exit 1
-  fi
+(($# > 0)) && [[ $1 == stop ]] && stop_services
+if (($# > 0)) && [[ $1 != all ]] && [[ $1 != dependency-track ]] && [[ $1 != sonarqube ]]; then
+  echo -e "${COL_RED}Unknown option${COL_RESET} - this program only understands the following options:"
+  echo "(no options)       Start GitLab"
+  echo -e "${COL_YELLOW}dependency-track${COL_RESET}   Start Dependency-Track (and GitLab)"
+  echo -e "${COL_YELLOW}sonarqube${COL_RESET}          Start SonarQube (and GitLab)"
+  echo -e "${COL_YELLOW}all${COL_RESET}                Start Dependency-Track, SonarQube, and GitLab"
+  echo -e "${COL_YELLOW}stop${COL_RESET}               Stop all started services"
+  exit 1
 fi
+
+setup
+validate_hostnames
+start_gitlab
+if (($# > 0)); then
+   [[ $1 == all ]] || [[ $1 == dependency-track ]] && start_dependency-track
+   [[ $1 == all ]] || [[ $1 == sonarqube ]] && start_sonarqube
+fi
+fix_permissions
+wait_for_gitlab
+
