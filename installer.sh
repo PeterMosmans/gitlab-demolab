@@ -151,9 +151,8 @@ setup
 validate_hostnames
 start_gitlab
 if (($# > 0)); then
-   [[ $1 == all ]] || [[ $1 == dependency-track ]] && start_dependency-track
-   [[ $1 == all ]] || [[ $1 == sonarqube ]] && start_sonarqube
+  [[ $1 == all ]] || [[ $1 == dependency-track ]] && start_dependency-track
+  [[ $1 == all ]] || [[ $1 == sonarqube ]] && start_sonarqube
 fi
 fix_permissions
 wait_for_gitlab
-
