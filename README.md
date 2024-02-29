@@ -1,12 +1,13 @@
 # GitLab Demolab
 
-This repository contains all files to set up a local network, consisting of a
-CI/CD GitLab server and multiple (docker-in-docker compatible) GitLab runners.
-Optionally, SonarQube as well as Dependency-Track can be set up.
+This repository contains all files to automatically configure and set up a local
+demo environment, consisting of a CI/CD GitLab server and multiple
+(Docker-in-Docker) GitLab runners. Optionally, SonarQube as well as
+Dependency-Track can be configured and set up as well.
 
 ## Prerequisites
 
-Have `docker` and `docker-compose` installed.
+Have `curl`, `docker`, and `docker-compose` installed.
 
 ## Usage
 
@@ -14,36 +15,33 @@ Have `docker` and `docker-compose` installed.
 ./installer.sh
 ```
 
-This will fire up an instance of GitLab, and two GitLab runners, capable of
+This will fire up an instance of GitLab and two GitLab runners, capable of
 performing Docker-in-Docker commands.
 
 All variables are stored in an `.env` file: The `.env` file itself not supplied
-in this repository, but an example is: To quickly get started, copy the file
-`env-example` file to `.env`, edit the values (especially the SonarQube and
-GitLab passwords), and you\'re good to go.
-
-If you don't create an `.env` file before using the installer, it will
-automatically copy and use the `env-example` file for you.
+in this repository, but an example is. If you don't create an `.env` file before
+using the installer, it will automatically copy and use the `env-example` file
+for you.
 
 Then, you\'ll need to register the (group of) runners with a valid runner token,
-which needs to be created manually: Go to the Admin Area / Dashboard, click on
-Shared Runners, and click on New instance runner (`/admin/runners/new`). Select
-\"Run untagged jobs\" and click on Create runner. This will generate a new
-runner token. Copy the token.
+which needs to be created manually: In GitLab, go to the Admin Area / Dashboard,
+click on Shared Runners, and click on New instance runner
+(`/admin/runners/new`). Select \"Run untagged jobs\" and click on Create runner.
+This will generate a new runner token. Copy the token.
 
 Lastly, execute the `register-runners.sh` script with that token as parameter.
 This script will register all runners that are up and running.
 
-## Starting SonarQube
+## Starting and configuring SonarQube
 
 ```console
 ./installer.sh sonarqube
 ```
 
-## Starting Dependency-Track
+## Starting and configuring Dependency-Track
 
 ```console
-./installer.sh dtrack
+./installer.sh dependency-track
 ```
 
 ## Stopping / pausing the demolab
@@ -55,7 +53,7 @@ This script will register all runners that are up and running.
 ## Removing the demolab
 
 ```console
-./installer.sh down
+docker-compose down
 ```
 
 By default all data, configuration and logs will be stored in persistent Docker
@@ -121,13 +119,13 @@ to use.
 
 **Important!**
 
+The GITLAB_PASSWORD needs to be complex, otherwise installation will fail, see
+<https://about.gitlab.com/handbook/security/password-standard.html>.
+
 If you want to access the web interfaces using \"pretty host names\" that are
 defined using `GITLAB_HOSTNAME` and `SONARQUBE_HOSTNAME` (instead of
 `localhost`), then make sure that they can be resolved by your browser. This can
 be done for instance by adding them to your local `hosts` file.
-
-Note that the GITLAB_PASSWORD needs to be complex, otherwise installation will
-fail, see <https://about.gitlab.com/handbook/security/password-standard.html>
 
 # Copyright / License
 
