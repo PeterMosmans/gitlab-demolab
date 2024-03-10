@@ -1,0 +1,39 @@
+---
+# SPDX-License-Identifier: GPL-3.0-or-later
+# (c) 2020-2024 Peter Mosmans [Go Forward]
+
+# Pipeline template for automated security testing
+
+### Variables used throughout the pipeline
+
+variables:
+  # These variables will be used throughout the pipeline, in all jobs
+  # By default, the repository will not be used; artifacts will
+  GIT_STRATEGY: none
+  IMAGE_TAG: ${CI_COMMIT_SHORT_SHA}
+  IMAGE_TAR: ${IMAGE_TAG}.tar
+
+### Include several jobs
+
+include:
+  # build
+  - .gitlab/docker-build.gitlab-ci.yml
+
+### Pipeline stages
+
+stages:
+  # Build the artifact
+  - build
+
+### Jobs
+
+# All jobs that start with a dot are templates and can be extended.
+
+.build:
+  stage: build
+  # No artifacts from previous stages are required
+  dependencies: []
+  # Ensure a "clean" build environment
+  variables:
+    GIT_DEPTH: 1
+    GIT_STRATEGY: clone

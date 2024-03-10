@@ -1,0 +1,88 @@
+---
+# SPDX-License-Identifier: GPL-3.0-or-later
+# (c) 2020-2024 Peter Mosmans [Go Forward]
+
+# Pipeline template for automated security testing
+
+### Variables used throughout the pipeline
+
+variables:
+  # These variables will be used throughout the pipeline, in all jobs
+  # Generic cache directory
+  CACHE_DIR: /srv/cache
+  # By default, the repository will not be used; artifacts will
+  GIT_STRATEGY: none
+  IMAGE_TAG: ${CI_COMMIT_SHORT_SHA}
+  IMAGE_TAR: ${IMAGE_TAG}.tar
+  # Tool-specific: Image versions
+  DEPENDENCY_VERSION: 9.0.9
+  HADOLINT_VERSION: v2.12.0-debian
+  NJSSCAN_VERSION: 0.3.6
+  TOOLS_VERSION: 1.8.0
+  TRIVY_VERSION: 0.49.1
+  ZAP_VERSION: 2.14.0
+
+### Include several jobs
+
+include:
+  # .pre
+  - .gitlab/detect-secrets.gitlab-ci.yml
+  # sast
+  - .gitlab/hadolint.gitlab-ci.yml
+  # sast
+  - .gitlab/njsscan.gitlab-ci.yml
+  # security
+  - .gitlab/sonarqube.gitlab-ci.yml
+  # build
+  - .gitlab/docker-build.gitlab-ci.yml
+  # security
+  - .gitlab/dependency-check.gitlab-ci.yml
+  # security
+  - .gitlab/trivy.gitlab-ci.yml
+  # security
+  - .gitlab/zap.gitlab-ci.yml
+  # security
+  - .gitlab/nikto.gitlab-ci.yml
+
+### Pipeline stages
+
+stages:
+  # Security checks over source code, can be performed parallel to building
+  - sast
+  # Build the artifact
+  - build
+  # (Dynamic) security checks using / over build artifact
+  - security
+
+### Jobs
+
+# All jobs that start with a dot are templates and can be extended.
+
+.sast:
+  stage: sast
+  # No artifacts from previous stages are required
+  dependencies: []
+  # Source code is necessary
+  variables:
+    GIT_DEPTH: 1
+    GIT_STRATEGY: fetch
+  # Run after the detect-secrets job finishes
+  needs:
+    - detect-secrets
+
+.build:
+  stage: build
+  # No artifacts from previous stages are required
+  dependencies: []
+  # Ensure a "clean" build environment
+  variables:
+    GIT_DEPTH: 1
+    GIT_STRATEGY: clone
+  # Run after detect-secrets ran successfully
+  needs:
+    - detect-secrets
+
+.security:
+  stage: security
+  needs:
+    - build

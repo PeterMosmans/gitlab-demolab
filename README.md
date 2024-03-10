@@ -1,9 +1,9 @@
 # GitLab Demolab
 
 This repository contains all files to automatically configure and set up a local
-demo environment, consisting of a CI/CD GitLab server and multiple
-(Docker-in-Docker) GitLab runners. Optionally, SonarQube as well as
-Dependency-Track can be configured and set up as well.
+demo environment, consisting of a CI/CD GitLab Community Edition server and
+multiple (Docker-in-Docker) GitLab runners. Optionally, SonarQube Community
+Edition and Dependency-Track can be configured and set up as well.
 
 ## Prerequisites
 
@@ -71,6 +71,24 @@ changed in the file `docker-compose`.
 Furthermore all runners share one named Docker volume as cache under
 `/srv/cache`. This named volume will be initialized by default, and has lax
 permissions (to ensure all tools can work with it).
+
+## Juice Shop demonstration scripts
+
+Furthermore, the repository contains a number of pipeline example scripts, to
+help you add several automated security testing tools to a GitLab pipeline. The
+pipeline definition files can be found in the folder [juice-shop](juice-shop/):
+
+- [Basic build pipeline](juice-shop/build-pipeline/)
+- [Detecting secrets in a code base with detect-secrets](juice-shop/detect-secrets/)
+- [Dockerfile linting with Hadolint](juice-shop/hadolint/)
+- [SAST with Njsscan](juice-shop/njsscan/)
+- [SAST with SonarQube](juice-shop/sonarqube/)
+- [Software composition analysis with Dependency-Check](juice-shop/dependency-check/)
+- [Component analysis with Dependency-Track](juice-shop/dependency-track/)
+- [Container vulnerability scanning with Trivy](juice-shop/trivy/)
+- [DAST with ZAP](juice-shop/zap/)
+- [DAST with Nikto](juice-shop/nikto/)
+- [Full automated security testing](juice-shop/full-testing/)
 
 ## Variables
 

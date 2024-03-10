@@ -1,0 +1,56 @@
+---
+# SPDX-License-Identifier: GPL-3.0-or-later
+# (c) 2020-2024 Peter Mosmans [Go Forward]
+#
+# Performs a web application scan using ZAP.
+
+# Variables:
+# IMAGE_TAG          Docker image tag
+# ZAP_CONFIG         ZAP configuration file.
+# ZAP_VERSION        Specifies which version of zaproxy/zaproxy is being used
+
+zap:
+  extends: .security
+  variables:
+    GIT_DEPTH: 1
+    GIT_STRATEGY: fetch
+    ZAP_CONFIG: zap.yaml
+  image:
+    name: owasp/zap2docker-bare:${ZAP_VERSION}
+    entrypoint: [""]
+  services:
+    - name: $IMAGE_TAG
+      alias: juice-shop
+  before_script:
+    - mkdir -p reports &>/dev/null || true
+    # Use absolute report paths in the configuration file
+    - >
+      REPLACE=$(sed -e 's/[&\\/]/\\&/g; s/$/\\/' -e '$s/\\$//' <<<"$CI_PROJECT_DIR") ;
+      sed -i "s/CI_PROJECT_DIR/$REPLACE/g" ${ZAP_CONFIG}
+    # Check if the service is up
+    - >
+      curl --max-time 120
+      --retry 60
+      --retry-connrefused
+      --retry-delay 5
+      --fail
+      --silent http://juice-shop:3000 >/dev/null || exit 1
+  script:
+    - zap.sh -cmd -notel -silent -autorun ${CI_PROJECT_DIR}/${ZAP_CONFIG}
+    # Set exit code based on whether there were warnings or errors
+    - >
+      warning=$(awk -F '[{}:,"]' '{print $9}' reports/zap-report.json) ;
+      fail=$(awk -F '[{}:,"]' '{print $13}' reports/zap-report.json) ;
+      if (($warning>0)) || (($fail>0)); then
+      exit 1;
+      fi
+  # Always show report
+  after_script:
+    - cat reports/zap-report.md
+  artifacts:
+    name: "$CI_JOB_NAME artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
+    when: always
+    paths:
+      - reports/zap-*.*
+  # Only flag the job as failed, not the whole pipeline
+  allow_failure: true

@@ -1,0 +1,49 @@
+---
+env:
+  contexts:
+    - excludePaths: []
+      name: baseline
+      urls:
+        - http://juice-shop:3000/
+  parameters:
+    failOnError: true
+    failOnWarning: true
+    progressToStdout: false
+jobs:
+  - parameters:
+      enableTags: false
+      maxAlertsPerRule: 10
+    type: passiveScan-config
+  - parameters:
+      maxDuration: 5
+      url: http://juice-shop:3000/
+    type: spider
+  - parameters:
+      maxDuration: 5
+    type: passiveScan-wait
+  - parameters:
+      format: Long
+      summaryFile: CI_PROJECT_DIR/reports/zap-report.json
+    rules: []
+    type: outputSummary
+  - parameters:
+      reportDescription: ""
+      reportDir: CI_PROJECT_DIR/reports
+      reportFile: zap-report.html
+      reportTitle: ZAP Scanning Report
+      template: traditional-html
+    type: report
+  - parameters:
+      reportDescription: ""
+      reportDir: CI_PROJECT_DIR/reports
+      reportFile: zap-report.md
+      reportTitle: ZAP Scanning Report
+      template: traditional-md
+    type: report
+  - parameters:
+      reportDescription: ""
+      reportDir: CI_PROJECT_DIR/reports
+      reportFile: zap-report.sarif.json
+      reportTitle: ZAP Scanning Report
+      template: sarif-json
+    type: report

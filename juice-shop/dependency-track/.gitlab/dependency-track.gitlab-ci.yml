@@ -1,0 +1,33 @@
+---
+# SPDX-License-Identifier: GPL-3.0-or-later
+# (c) 2020-2024 Peter Mosmans [Go Forward]
+#
+# Uploads SBOM files to a Dependency-Track server.
+#
+# Variables:
+# DTRACK_KEY         Dependency-Track access token (API key)
+# DTRACK_URL         Location of Dependency-Track API server
+# TOOLS_VERSION      Specifies which version of gofwd/tools-image is being used
+
+dependency-track:
+  extends: .security
+  # This job only needs curl
+  image:
+    name: gofwd/tools-image:${TOOLS_VERSION}
+    entrypoint: [""]
+  script:
+    - >
+      curl "${DTRACK_URL}api/v1/bom"
+      -H "X-Api-Key: ${DTRACK_KEY}"
+      -F "autoCreate=true"
+      -F "projectName=${CI_PROJECT_TITLE}-backend"
+      -F "bom=@bom-backend.json"
+    - >
+      curl "${DTRACK_URL}api/v1/bom"
+      -H "X-Api-Key: ${DTRACK_KEY}"
+      -F "autoCreate=true"
+      -F "projectName=${CI_PROJECT_TITLE}-frontend"
+      -F "bom=@bom-frontend.json"
+  rules:
+    - if: "$DTRACK_KEY != null"
+      when: on_success

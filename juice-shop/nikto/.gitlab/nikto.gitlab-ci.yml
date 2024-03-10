@@ -1,0 +1,46 @@
+---
+# SPDX-License-Identifier: GPL-3.0-or-later
+# (c) 2020-2024 Peter Mosmans [Go Forward]
+#
+# Performs a web server scan using Nikto.
+
+# Variables:
+# IMAGE_TAG          Docker image tag
+# TOOLS_VERSION      Specifies which version of gofwd/tools-image is being used
+
+nikto:
+  extends: .security
+  image:
+    name: gofwd/tools-image:${TOOLS_VERSION}
+    entrypoint: [""]
+  services:
+    - name: $IMAGE_TAG
+      alias: juice-shop
+  before_script:
+    - mkdir -p reports &>/dev/null || true
+    - >
+      curl --max-time 120
+      --retry 60
+      --retry-connrefused
+      --retry-delay 5
+      --fail
+      --silent http://juice-shop:3000 >/dev/null || exit 1
+  script:
+    - >
+      nikto.pl
+      -ask no
+      -nointeractive
+      -output reports/nikto-report.html
+      -Plugins '@@ALL;-sitefiles'
+      -Tuning x7
+      -host http://juice-shop:3000 > reports/nikto-report.txt
+  # Always show report
+  after_script:
+    - cat reports/nikto-report.txt
+  artifacts:
+    name: "$CI_JOB_NAME artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
+    when: always
+    paths:
+      - reports/nikto-report.*
+  # Only flag the job as failed, not the whole pipeline
+  allow_failure: true
