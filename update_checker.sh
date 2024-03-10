@@ -84,6 +84,8 @@ check_lab() {
 # Check for all defined images in the .gitlab-ci.yml file
 check_pipeline() {
   if [ -f ".gitlab-ci.yml" ]; then
+    show_latest_tags gofwd tools-image
+    check_tool TOOLS
     show_latest_tags owasp dependency-check
     check_tool DEPENDENCY
     show_latest_tags wagoodman dive nosuffix
