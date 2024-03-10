@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.0.0](https://github.com/PeterMosmans/gitlab-demolab/compare/2.1.0...3.0.0) (2024-03-10)
+
+
+### Features
+
+* add demonstration pipeline scripts ([e2b8757](https://github.com/PeterMosmans/gitlab-demolab/commit/e2b8757625491123b3d5144b06ae5dfc9889e88a))
+* add helper script to check whether images are up-to-date ([99e38d6](https://github.com/PeterMosmans/gitlab-demolab/commit/99e38d649c2cbd13fa38ef884d9772fbfbfd85d9))
+* add warning when curl is not installed ([0e0ab70](https://github.com/PeterMosmans/gitlab-demolab/commit/0e0ab708f1ead9c792dc348018d1a3944c5d2e04))
+* check version of gofwd/tools-image ([8f3812e](https://github.com/PeterMosmans/gitlab-demolab/commit/8f3812e34efe5640f18a3e6c08d3697e70f66e4c))
+* improve and colorize installer script ([6bb4c6c](https://github.com/PeterMosmans/gitlab-demolab/commit/6bb4c6c5143fc0a2dcbfe54e02d1815244ac2938))
+* improve initial configuration of SonarQube and Dependency-Track ([16d962d](https://github.com/PeterMosmans/gitlab-demolab/commit/16d962d0dc7ddbcd1c95c4476a53182929a6aa8e))
+* update default version of tools ([97db81a](https://github.com/PeterMosmans/gitlab-demolab/commit/97db81a97f9116835cc69bef8e19efa661ed24eb))
+* update defaults ([8953898](https://github.com/PeterMosmans/gitlab-demolab/commit/895389870dd526910ee11dcdb7ddfd19906cc9ed))
+* use correct image for Docker in Docker ([bd69cd5](https://github.com/PeterMosmans/gitlab-demolab/commit/bd69cd5e8af7517f4293350d25ed02d24dba9e87))
+* use faster Docker-in-docker driver by default ([eefd288](https://github.com/PeterMosmans/gitlab-demolab/commit/eefd288b32688a95d649f636e6163702b8be1590))
+
+
+### Bug Fixes
+
+* correct spelling error ([3beb41c](https://github.com/PeterMosmans/gitlab-demolab/commit/3beb41cb318165dba2baefbefb479ff95f786bd2))
+
 ## [2.1.0](https://github.com/PeterMosmans/gitlab-demolab/compare/2.0.0...2.1.0) (2024-02-02)
 
 
