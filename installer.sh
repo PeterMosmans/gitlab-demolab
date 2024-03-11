@@ -26,11 +26,11 @@ compose_file="docker-compose.yml"
 setup() {
   # Check if there already is an .env file
   if [[ ! -f .env ]]; then
-    echo -e "No ${COL_BOLD}.env${COL_RESET} file found, copying env-example file to create one..."
+    echo -e "No ${COL_BOLD}.env${COL_RESET} file found, copying env-example file to create one ... "
     cp env-example .env
     echo -e "${COL_GREEN}Default .env file created${COL_RESET}"
   else
-    echo -e "${COL_GREEN}Found existing .env file...${COL_RESET}"
+    echo -e "${COL_GREEN}Found existing .env file${COL_RESET}"
   fi
 
   # shellcheck disable=SC1091
@@ -54,13 +54,19 @@ validate_hostnames() {
 }
 
 wait_for_gitlab() {
-  echo "Waiting on GitLab to come up online..."
+  echo -n "Waiting on GitLab to initialize ... "
   while [[ $(
     "$COMPOSE" -f "$compose_file" logs gitlab 2> /dev/null | grep -q "Server initialized"
     echo $?
   ) -ne 0 ]]; do
     sleep 1
   done
+  echo -e "${COL_GREEN}done${COL_RESET}"
+  echo -n "Waiting on GitLab to come up online ... "
+  while [[ $(curl --silent -o /dev/null -w '%{http_code}\n' -X HEAD "http://${GITLAB_HOSTNAME}:${GITLAB_PORT}/users/sign_in") -ne 200 ]]; do
+    sleep 1
+  done
+  echo -e "${COL_GREEN}done${COL_RESET}"
   echo -e "You can now log in to GitLab at ${COL_BOLD}http://${GITLAB_HOSTNAME}:${GITLAB_PORT}${COL_RESET} as ${COL_BOLD}root${COL_RESET} using password ${COL_BOLD}${GITLAB_PASSWORD}${COL_RESET}"
   echo "If you haven't done already: Don't forget to create a runner token and register the runners manually"
   echo "Usage: ./register-runners.sh TOKEN"
@@ -69,13 +75,14 @@ wait_for_gitlab() {
 start_dependency-track() {
   echo -e "Starting ${COL_BOLD}Dependency-Track${COL_RESET}"
   "$COMPOSE" -f "$compose_file" up --detach dtrack-apiserver dtrack-frontend
-  echo "Waiting on Dependency-Track to come up online..."
+  echo -n "Waiting on Dependency-Track to come up online ... "
   while [[ $(
     "$COMPOSE" -f "$compose_file" logs dtrack-frontend 2> /dev/null | grep -q "Configuration complete"
     echo $?
   ) -ne 0 ]]; do
     sleep 1
   done
+  echo -e "${COL_GREEN}done${COL_RESET}"
   status_code=$(curl --silent -o /dev/null -w '%{http_code}\n' -d "username=admin" -d "password=admin" -d "newPassword=${DTRACK_PASSWORD}" -d "confirmPassword=${DTRACK_PASSWORD}" \
     "http://${DTRACK_HOSTNAME}:${DTRACK_API_PORT}/api/v1/user/forceChangePassword")
   if [ "$status_code" -eq 200 ]; then
@@ -93,10 +100,10 @@ configure_sonarqube() {
   status_code=$(curl --silent -o /dev/null -w '%{http_code}\n' -u admin:admin -X POST "http://${SONARQUBE_HOSTNAME}:${SONARQUBE_PORT}/api/users/change_password?login=admin&previousPassword=admin&password=${SONARQUBE_PASSWORD}")
   if [ "$status_code" -eq 204 ]; then
     echo -e "Changed the default ${COL_BOLD}admin${COL_RESET} password to ${SONARQUBE_PASSWORD}"
-    echo "Installing the following plugins: ${SONARQUBE_PLUGINS}..."
+    echo "Installing the following plugins: ${SONARQUBE_PLUGINS}"
     # shellcheck disable=SC2140
     "$COMPOSE" -f "$compose_file" exec sonarqube /bin/bash -c "for plugin in ${SONARQUBE_PLUGINS}; do curl --output-dir /opt/sonarqube/extensions/plugins/ -LO "\$plugin"; done"
-    echo "Restarting SonarQube..."
+    echo "Restarting SonarQube"
     "$COMPOSE" -f "$compose_file" restart sonarqube
   fi
 }
@@ -104,13 +111,14 @@ configure_sonarqube() {
 start_sonarqube() {
   echo -e "Starting ${COL_BOLD}SonarQube${COL_RESET}"
   "$COMPOSE" -f "$compose_file" up --detach sonarqube
-  echo "Waiting on SonarQube to come up online..."
+  echo -n "Waiting on SonarQube to come up online ... "
   while [[ $(
     "$COMPOSE" -f "$compose_file" logs sonarqube 2> /dev/null | grep -q "SonarQube is operational"
     echo $?
   ) -ne 0 ]]; do
     sleep 1
   done
+  echo -e "${COL_GREEN}done${COL_RESET}"
   configure_sonarqube
   echo -e "You now can log in to SonarQube at ${COL_BOLD}http://${SONARQUBE_HOSTNAME}:${SONARQUBE_PORT}${COL_RESET}"
 }
@@ -122,7 +130,7 @@ fix_permissions() {
 
 # Stop all services and exit
 stop_services() {
-  echo "Stopping all services..."
+  echo "Stopping all services"
   "$COMPOSE" -f "$compose_file" stop
   exit 0
 }
