@@ -38,6 +38,8 @@ include:
   # security
   - .gitlab/dependency-check.gitlab-ci.yml
   # security
+  - .gitlab/dependency-track.gitlab-ci.yml
+  # security
   - .gitlab/trivy.gitlab-ci.yml
   # security
   - .gitlab/zap.gitlab-ci.yml
