@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.1.0](https://github.com/PeterMosmans/gitlab-demolab/compare/3.0.0...3.1.0) (2024-03-14)
+
+
+### Features
+
+* use consistent messaging while starting up ([a4bbe3f](https://github.com/PeterMosmans/gitlab-demolab/commit/a4bbe3f0dbee15d87d0faa6503635e69e637d3ac))
+
+
+### Bug Fixes
+
+* ensure that checkout for detect-secrets is not ambiguous ([cc85679](https://github.com/PeterMosmans/gitlab-demolab/commit/cc8567998ccc0b034216280012fee324f2a79ebb))
+* move Trivy pipeline script to correct directory ([cd45488](https://github.com/PeterMosmans/gitlab-demolab/commit/cd45488b26dc72ea1ed29f103e70e47c2063264b))
+* use Dependency-Track during subsequent tests ([aac6e2d](https://github.com/PeterMosmans/gitlab-demolab/commit/aac6e2da3dc911db8aa553c0a86b451c1e5dd8b1))
+
 ## [3.0.0](https://github.com/PeterMosmans/gitlab-demolab/compare/2.1.0...3.0.0) (2024-03-10)
 
 
