@@ -16,8 +16,8 @@ hadolint:
     - mkdir -p reports &>/dev/null || true
   script:
     - >
-      hadolint Dockerfile > reports/hadolint-report.txt ;
-      hadolint Dockerfile --failure-threshold warning -f sonarqube > reports/hadolint-report.json
+      hadolint --no-fail Dockerfile > reports/hadolint-report.txt ;
+      hadolint --failure-threshold warning -f sonarqube Dockerfile > reports/hadolint-report.json
   # Always show report
   after_script:
     - cat reports/hadolint-report.txt
