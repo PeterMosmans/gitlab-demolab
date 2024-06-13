@@ -15,6 +15,11 @@ COL_RED="\033[0;31m"
 COL_RESET="\033[0m"
 COL_YELLOW="\033[0;33m"
 
+temp_file=$(mktemp)
+
+# Clean up temporary file when exiting
+trap 'rm -f $temp_file' EXIT
+
 # Determine latest tag and set the GLOBAL variable latest
 show_latest_tags() {
   repository=$1
@@ -27,15 +32,15 @@ show_latest_tags() {
   else
     local expander=""
   fi
-  curl --silent -L "https://registry.hub.docker.com/v2/repositories/$repository/$image/tags?page_size=100$expander" | jq --raw-output '.results[].name' | (grep -Ev '(beta|latest|nightly|rc|snapshot)' || true) | grep -P '^v?\d+\.\d+\.\d+' | sort -rV > templist
+  curl --silent -L "https://registry.hub.docker.com/v2/repositories/$repository/$image/tags?page_size=100$expander" | jq --raw-output '.results[].name' | (grep -Ev '(beta|latest|nightly|rc|snapshot)' || true) | grep -P '^v?\d+\.\d+\.\d+' | sort -rV > "$temp_file"
   if [[ -n $suffix ]]; then
     if [[ $suffix == nosuffix ]]; then
-      latest=$(grep -P '^v?\d+\.\d+\.\d+$' templist | head -1)
+      latest=$(grep -P '^v?\d+\.\d+\.\d+$' "$temp_file" | head -1)
     else
-      latest=$(grep "$suffix$" templist | head -1)
+      latest=$(grep "$suffix$" "$temp_file" | head -1)
     fi
   else
-    latest=$(head -1 templist)
+    latest=$(head -1 "$temp_file")
   fi
 }
 
@@ -103,5 +108,20 @@ check_pipeline() {
   fi
 }
 
-check_lab
-check_pipeline
+# If command line parameters are used, try to find latest version
+if [ $# -eq 1 ]; then
+  echo -e "Usage: ${COL_BOLD}update_checker.sh${COL_RESET}"
+  echo -e "       Determines whether latest image versions are in use\n"
+  echo -e "       ${COL_BOLD}update_checker.sh${COL_RESET} REPOSITORY IMAGE"
+  echo -e "       Displays latest image version of REPOSITORY/IMAGE on Docker Hub\n"
+  exit 0
+fi
+if [ $# -eq 2 ]; then
+  show_latest_tags "$1" "$2"
+  echo "$latest"
+  echo -e "\nLast 10 tags:"
+  head -10 "$temp_file"
+else
+  check_lab
+  check_pipeline
+fi
