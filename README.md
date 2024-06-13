@@ -25,7 +25,7 @@ for you.
 
 Then, you\'ll need to register the (group of) runners with a valid runner token,
 which needs to be created manually: In GitLab, go to the Admin Area / Dashboard,
-click on Shared Runners, and click on New instance runner
+click on Instant Runners, and click on New instance runner
 (`/admin/runners/new`). Select \"Run untagged jobs\" and click on Create runner.
 This will generate a new runner token. Copy the token.
 
