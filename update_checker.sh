@@ -103,7 +103,7 @@ check_pipeline() {
     check_tool TRIVY
     show_latest_tags opensecurity njsscan
     check_tool NJSSCAN
-    show_latest_tags owasp zap2docker-bare
+    show_latest_tags zaproxy zap-bare
     check_tool ZAP
   fi
 }

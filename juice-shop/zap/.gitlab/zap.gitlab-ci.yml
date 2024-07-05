@@ -16,7 +16,7 @@ zap:
     GIT_STRATEGY: fetch
     ZAP_CONFIG: zap.yaml
   image:
-    name: owasp/zap2docker-bare:${ZAP_VERSION}
+    name: zaproxy/zap-bare:${ZAP_VERSION}
     entrypoint: [""]
   services:
     - name: $IMAGE_TAG
