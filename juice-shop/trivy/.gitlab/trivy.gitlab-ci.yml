@@ -21,7 +21,9 @@ trivy:
       trivy --cache-dir ${CACHE_DIR}/trivy
       image --input ${IMAGE_TAR}
       --format json
-      --output reports/trivy-report.json ;
+      --output reports/trivy-report.json
+      --quiet
+      --timeout 3600s ;
       trivy convert --format table --output reports/trivy-report.txt reports/trivy-report.json ;
       trivy convert --format sarif --output reports/trivy-report.sarif.json reports/trivy-report.json
   # Always show report
