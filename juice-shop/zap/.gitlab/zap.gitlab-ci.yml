@@ -34,6 +34,7 @@ zap:
       --retry-connrefused
       --retry-delay 5
       --fail
+      --ipv4
       --silent http://juice-shop:3000 >/dev/null || exit 1
   script:
     - zap.sh -cmd -notel -silent -autorun ${CI_PROJECT_DIR}/${ZAP_CONFIG}
