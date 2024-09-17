@@ -49,24 +49,26 @@ check_env() {
   in_use=$(awk -F '=' "/$1_VERSION/{print \$2}" .env)
   if [ -n "$latest" ] && [ -n "$in_use" ]; then
     if [ "$latest" = "$in_use" ]; then
-      echo -e "$COL_GREEN$in_use$COL_RESET is the latest version"
+      echo -e "${COL_BOLD}.env${COL_RESET}: $COL_GREEN$in_use$COL_RESET is the latest version"
     else
-      echo -e "$COL_RED$in_use$COL_RESET can be updated to $COL_BOLD$latest$COL_RESET"
+      echo -e "${COL_BOLD}.env${COL_RESET}: $COL_RED$in_use$COL_RESET can be updated to $COL_BOLD$latest$COL_RESET"
     fi
   fi
 }
 
 # Display version number from a YAML file
 check_tool() {
-  in_use=$(awk -F ': ' "/$1_VERSION/{print \$2}" .gitlab-ci.yml)
+  config=$2
+  if [ -z "$config" ]; then
+    config=".gitlab.ci.yml"
+  fi
+  in_use=$(awk -F ': ' "/$1_VERSION/{print \$2}" "$config")
   if [ -n "$in_use" ]; then
     if [ "$latest" = "$in_use" ]; then
-      echo -e "$COL_GREEN$in_use$COL_RESET is the latest version"
+      echo -e "${COL_BOLD}$config${COL_RESET}: $COL_GREEN$in_use$COL_RESET is the latest version"
     else
-      echo -e "$COL_RED$in_use$COL_RESET can be updated to $COL_BOLD$latest$COL_RESET"
+      echo -e "${COL_BOLD}$config${COL_RESET}: $COL_RED$in_use$COL_RESET can be updated to $COL_BOLD$latest$COL_RESET"
     fi
-  else
-    echo "Not defined in .gitlab-ci.yml"
   fi
 }
 
@@ -87,25 +89,30 @@ check_lab() {
 }
 
 # Check for all defined images in the .gitlab-ci.yml file
-check_pipeline() {
-  if [ -f ".gitlab-ci.yml" ]; then
-    show_latest_tags gofwd tools-image
-    check_tool TOOLS
-    show_latest_tags owasp dependency-check
-    check_tool DEPENDENCY
-    show_latest_tags wagoodman dive nosuffix
-    check_tool DIVE
-    show_latest_tags goodwithtech dockle nosuffix
-    check_tool DOCKLE
-    show_latest_tags hadolint hadolint debian
-    check_tool HADOLINT
-    show_latest_tags aquasec trivy nosuffix
-    check_tool TRIVY
-    show_latest_tags opensecurity njsscan
-    check_tool NJSSCAN
-    show_latest_tags zaproxy zap-bare
-    check_tool ZAP
-  fi
+check_pipelines() {
+  show_latest_tags gofwd tools-image
+  check_configs TOOL
+  show_latest_tags owasp dependency-check
+  check_configs DEPENDENCY
+  show_latest_tags wagoodman dive nosuffix
+  check_configs DIVE
+  show_latest_tags goodwithtech dockle nosuffix
+  check_configs DOCKLE
+  show_latest_tags hadolint hadolint debian
+  check_configs HADOLINT
+  show_latest_tags aquasec trivy nosuffix
+  check_configs TRIVY
+  show_latest_tags opensecurity njsscan
+  check_configs NJSSCAN
+  show_latest_tags zaproxy zap-bare
+  check_configs ZAP
+}
+
+check_configs() {
+  # shellcheck disable=SC2044
+  for conf in $(find . -type f -name '.gitlab-ci.yml'); do
+    check_tool "$1" "$conf"
+  done
 }
 
 # If command line parameters are used, try to find latest version
@@ -123,5 +130,5 @@ if [ $# -eq 2 ]; then
   head -10 "$temp_file"
 else
   check_lab
-  check_pipeline
+  check_pipelines
 fi
