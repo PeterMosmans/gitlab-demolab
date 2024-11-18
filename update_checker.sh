@@ -67,7 +67,9 @@ check_tool() {
     if [ "$latest" = "$in_use" ]; then
       echo -e "${COL_BOLD}$config${COL_RESET}: $COL_GREEN$in_use$COL_RESET is the latest version"
     else
-      echo -e "${COL_BOLD}$config${COL_RESET}: $COL_RED$in_use$COL_RESET can be updated to $COL_BOLD$latest$COL_RESET"
+      echo -e "${COL_BOLD}$config${COL_RESET}: $COL_RED$in_use$COL_RESET will be updated to $COL_BOLD$latest$COL_RESET"
+      echo "Don't forget to test whether this version still works..."
+      sed --in-place --expression "s/${in_use}/${latest}/" "${config}"
     fi
   fi
 }
