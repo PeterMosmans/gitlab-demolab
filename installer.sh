@@ -102,7 +102,7 @@ configure_sonarqube() {
     echo -e "Changed the default ${COL_BOLD}admin${COL_RESET} password to ${SONARQUBE_PASSWORD}"
     echo "Installing the following plugins: ${SONARQUBE_PLUGINS}"
     # shellcheck disable=SC2140
-    "$COMPOSE" -f "$compose_file" exec sonarqube /bin/bash -c "for plugin in ${SONARQUBE_PLUGINS}; do curl --output-dir /opt/sonarqube/extensions/plugins/ -LO "\$plugin"; done"
+    "$COMPOSE" -f "$compose_file" exec sonarqube /bin/bash -c "for plugin in ${SONARQUBE_PLUGINS}; do wget --directory-prefix /opt/sonarqube/extensions/plugins/ -L "\$plugin"; done"
     echo "Restarting SonarQube"
     "$COMPOSE" -f "$compose_file" restart sonarqube
   fi
