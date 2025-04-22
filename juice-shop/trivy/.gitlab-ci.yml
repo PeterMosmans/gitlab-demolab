@@ -15,11 +15,11 @@ variables:
   IMAGE_TAG: ${CI_COMMIT_SHORT_SHA}
   IMAGE_TAR: ${IMAGE_TAG}.tar
   # Tool-specific: Image versions
-  DEPENDENCY_VERSION: 11.1.1
+  DEPENDENCY_VERSION: 12.1.1
   HADOLINT_VERSION: v2.12.0-debian
   NJSSCAN_VERSION: 0.4.3
   TOOLS_VERSION: 1.8.0
-  TRIVY_VERSION: 0.58.1
+  TRIVY_VERSION: 0.61.1
 
 ### Include several jobs
 
