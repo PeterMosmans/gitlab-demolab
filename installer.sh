@@ -11,6 +11,7 @@
 # sonarqube        Start (and configure) SonarQube
 # dependency-track Start (and configure) Dependency-Track
 # stop             Stop all services
+# remove           Stop all services and remove all volumes
 
 set -u
 
@@ -135,7 +136,15 @@ stop_services() {
   exit 0
 }
 
+# Stop all services and remove all volumes
+remove_services() {
+  echo "Stopping and removing all services"
+  "$COMPOSE" -f "$compose_file" down --volumes 2> /dev/null
+  exit 0
+}
+
 (($# > 0)) && [[ $1 == stop ]] && stop_services
+(($# > 0)) && [[ $1 == remove ]] && remove_services
 if (($# > 0)) && [[ $1 != all ]] && [[ $1 != dependency-track ]] && [[ $1 != sonarqube ]]; then
   echo -e "${COL_RED}Unknown option${COL_RESET} - this program only understands the following options:"
   echo "(no options)       Start GitLab"
@@ -143,6 +152,7 @@ if (($# > 0)) && [[ $1 != all ]] && [[ $1 != dependency-track ]] && [[ $1 != son
   echo -e "${COL_YELLOW}sonarqube${COL_RESET}          Start SonarQube (and GitLab)"
   echo -e "${COL_YELLOW}all${COL_RESET}                Start Dependency-Track, SonarQube, and GitLab"
   echo -e "${COL_YELLOW}stop${COL_RESET}               Stop all started services"
+  echo -e "${COL_YELLOW}remove${COL_RESET}               Stop started services and remove volumes"
   exit 1
 fi
 
@@ -153,5 +163,6 @@ if (($# > 0)); then
   [[ $1 == all ]] || [[ $1 == dependency-track ]] && start_dependency-track
   [[ $1 == all ]] || [[ $1 == sonarqube ]] && start_sonarqube
 fi
+
 fix_permissions
 wait_for_gitlab
