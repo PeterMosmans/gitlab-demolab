@@ -5,8 +5,6 @@
 # Basic docker-compose file to start a GitLab demo network
 # Part of https://github.com/PeterMosmans/gitlab-demolab
 
-version: "3.5"
-
 # All services need to be part of the same network for communication
 networks:
   default:
@@ -95,7 +93,7 @@ services:
     volumes:
       - gitlab_runner_config_1:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
-      - runner_cache:/srv/cache:z
+      - runner_cache:/srv/cache
 
   gitlab-runner-2:
     container_name: ${DEMO_NAME}-gitlab-runner-2
@@ -107,7 +105,7 @@ services:
     volumes:
       - gitlab_runner_config_2:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
-      - runner_cache:/srv/cache:z
+      - runner_cache:/srv/cache
 
   # SonarQube
   sonarqube:
