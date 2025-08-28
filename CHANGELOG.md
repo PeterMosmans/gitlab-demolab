@@ -1,5 +1,37 @@
 # Changelog
 
+## [3.2.0](https://github.com/PeterMosmans/gitlab-demolab/compare/3.1.0...3.2.0) (2025-08-28)
+
+
+### Features
+
+* add option to remove services and volumes ([0878973](https://github.com/PeterMosmans/gitlab-demolab/commit/087897353138ddb5b3064654f4b35cd73942e81e))
+* automatically update scripts to latest version ([8676781](https://github.com/PeterMosmans/gitlab-demolab/commit/8676781605a4869618b2f989e36f358d22133d50))
+* bump version numbers ([bb6c591](https://github.com/PeterMosmans/gitlab-demolab/commit/bb6c59178f22178b685afb6a7a6f3659449a9a6c))
+* bump versions of service images ([37076db](https://github.com/PeterMosmans/gitlab-demolab/commit/37076db77616174da7b9d4c1626dc34b369a05ac))
+* bump versions of several used images ([bd7601c](https://github.com/PeterMosmans/gitlab-demolab/commit/bd7601ca2dce3c27b57e8f86fad9821da93d9ba9))
+* bump versions to verified latest ones ([0c0410f](https://github.com/PeterMosmans/gitlab-demolab/commit/0c0410f5015cfd4044228f3894f23dd90bc26a7c))
+* clean up temporary files after use ([8abf1d0](https://github.com/PeterMosmans/gitlab-demolab/commit/8abf1d0bb47b1072787e8d23b8ce5fb6590a8a3e))
+* remove deprecated values ([dd38154](https://github.com/PeterMosmans/gitlab-demolab/commit/dd38154d939ae7fa35236c234e99269318cb32a9))
+* suppress status messages and extend time-out ([490471e](https://github.com/PeterMosmans/gitlab-demolab/commit/490471e6a2e9868eaac976978cc5c9a29159b378))
+* update automated security testing tool images ([6943d45](https://github.com/PeterMosmans/gitlab-demolab/commit/6943d458d4395a8ebf269ff7db1362483e4a0354))
+* update checker now scans all gitlab-ci.yml files ([4dd8084](https://github.com/PeterMosmans/gitlab-demolab/commit/4dd80843ad306f62c03618c4eb7e88a529c737c3))
+* update default automated security testing tool images ([18da7c1](https://github.com/PeterMosmans/gitlab-demolab/commit/18da7c10176e639ebbc4c52bbd691415e3c1a038))
+* update plugins ([7881a38](https://github.com/PeterMosmans/gitlab-demolab/commit/7881a38d74bc0a29e4cfb1ba02ed2cae9e4031d0))
+* update various images ([a39db94](https://github.com/PeterMosmans/gitlab-demolab/commit/a39db946db6f3ec6695b4a93d90abebc82b0de17))
+* update versions ([27a2655](https://github.com/PeterMosmans/gitlab-demolab/commit/27a2655a13ae978b085f33843a21255fac23c010))
+* update versions with latest tested ones ([d79ca36](https://github.com/PeterMosmans/gitlab-demolab/commit/d79ca36a4a38bd11f68e9e28f7cf1a2d4d231550))
+* use updated ZAP Docker repository ([b1f90ee](https://github.com/PeterMosmans/gitlab-demolab/commit/b1f90ee318246169cb254683c965bca59e4605d8))
+* workaround for curl not being able to resolve docker hosts ([cccf800](https://github.com/PeterMosmans/gitlab-demolab/commit/cccf8002517df6d09713099e1bb3fd62a9e999ff))
+
+
+### Bug Fixes
+
+* ensure repository is ready to be linted for first run ([1110d79](https://github.com/PeterMosmans/gitlab-demolab/commit/1110d796e529d908e00ed8bc92d24891002a8da1))
+* ensure that first Hadolint run always continues ([93037ad](https://github.com/PeterMosmans/gitlab-demolab/commit/93037ad5b390e11a1697de893e626caa017c4d93))
+* use IPv4 for curl ([11996de](https://github.com/PeterMosmans/gitlab-demolab/commit/11996dea938110fffe2bae28856057d67de462be))
+* use wget instead of curl for newer SonarQube images ([6d9b834](https://github.com/PeterMosmans/gitlab-demolab/commit/6d9b8341321ca33bb1a504fbc8c8c7d8bbaa60c7))
+
 ## [3.1.0](https://github.com/PeterMosmans/gitlab-demolab/compare/3.0.0...3.1.0) (2024-03-14)
 
 
